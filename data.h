@@ -6,10 +6,11 @@
 #define PROJET_CDATAFRAME_DATA_H
 
 typedef struct {
-    char title;
+    char *title;
     int T_Logique;
     int T_Physique;
-    int data[];
+    int *data;
 } COLUMN;
 
+COLUMN *create_column(char* title);
 #endif //PROJET_CDATAFRAME_DATA_H

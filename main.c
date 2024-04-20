@@ -10,7 +10,10 @@ int main() {
     else
         printf("Error adding value to my column\n");
 
-    //for (int i = 0; i)
+    printf("\n%s \n", mycol->title);
+    for (int i = 0 ; i < mycol->T_Logique ; i++){
+        printf("%d \n", mycol->data[i]);
+    }
     return 0;
 }
 

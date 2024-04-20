@@ -73,6 +73,7 @@ void print_col(COLUMN* col) {
     for (int i = 0 ; i < col->T_Logique ; i++) {
         printf("[%d]\t %d \n", i, col->data[i]);
     }
+    printf("\n");
 }
 
 int number_occ(COLUMN* col, int value) {
@@ -82,6 +83,54 @@ int number_occ(COLUMN* col, int value) {
     /* Parcours de toutes les données */
     for (int i = 0 ; i < col->T_Logique ; i++) {
         if (col->data[i] == value)
+            cpt++;
+    }
+
+    return  cpt;
+}
+
+int val_at_pos(COLUMN* col, int pos) {
+    /* Vérifie que la position fait partie du tableau */
+    if (pos <= col->T_Logique)
+        return col->data[pos];
+
+    /* Sinon retourner NULL (0) */
+    return (int) NULL;
+}
+
+int greater_than(COLUMN* col, int x) {
+    /* Initialisation du compteur */
+    int cpt = 0;
+
+    /* Parcours de toutes les données */
+    for (int i = 0 ; i < col->T_Logique ; i++) {
+        if (col->data[i] > x)
+            cpt++;
+    }
+
+    return  cpt;
+}
+
+int less_than(COLUMN* col, int x) {
+    /* Initialisation du compteur */
+    int cpt = 0;
+
+    /* Parcours de toutes les données */
+    for (int i = 0 ; i < col->T_Logique ; i++) {
+        if (col->data[i] < x)
+            cpt++;
+    }
+
+    return  cpt;
+}
+
+int equal_to(COLUMN* col, int x) {
+    /* Initialisation du compteur */
+    int cpt = 0;
+
+    /* Parcours de toutes les données */
+    for (int i = 0 ; i < col->T_Logique ; i++) {
+        if (col->data[i] == x)
             cpt++;
     }
 

@@ -44,4 +44,32 @@ void print_col(COLUMN* col);
  */
 int number_occ(COLUMN* col, int value);
 
+/* Value at position x
+ * @param1 : Pointer to a column
+ * @param2 : Position
+ * @return : The value at the position x
+ */
+int val_at_pos(COLUMN* col, int pos);
+
+/* Number of value > x
+ * @param1 : Pointer to a column
+ * @param2 : X
+ * @return : Number of value greater than x
+ */
+int greater_than(COLUMN* col, int x);
+
+/* Number of value < x
+ * @param1 : Pointer to a column
+ * @param2 : X
+ * @return : Number of value less than x
+ */
+int less_than(COLUMN* col, int x);
+
+/* Number of value = x
+ * @param1 : Pointer to a column
+ * @param2 : X
+ * @return : Number of value equal to x
+ */
+int equal_to(COLUMN* col, int x);
+
 #endif //PROJET_CDATAFRAME_COLUMN_H

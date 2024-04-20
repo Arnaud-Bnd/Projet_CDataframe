@@ -12,11 +12,11 @@ COLUMN *create_column(char* title) {
     column->T_Logique = 0;
     column->T_Physique = 0;
     column->data = NULL;
+
     return column;
 }
 
 int insert_value(COLUMN* col, int value) {
-
     /* Si la colonne n'a pas encore été utilisé, faire une allocation */
     if (col->data == NULL) {
         /* Allocation */
@@ -47,4 +47,43 @@ int insert_value(COLUMN* col, int value) {
     else {
         return 0;
     }
+}
+
+void delete_column(COLUMN *col) {
+    /* Libère la mémoire allouée au tableau de donnée */
+    col->T_Physique = 0;
+    col->T_Logique = 0;
+    col->data = NULL;
+    free(col->data);
+
+    /* Libère la mémoire allouée au titre de la colonne */
+    col->title = NULL;
+    free(col->title);
+
+    /* Libère la mémoire allouée à la colonne */
+    col = NULL;
+    free(col);
+}
+
+void print_col(COLUMN* col) {
+    /* Afficher le titre de la colonne */
+    printf("\n%s \n", col->title);
+
+    /* Afficher les données de la colonne */
+    for (int i = 0 ; i < col->T_Logique ; i++) {
+        printf("[%d]\t %d \n", i, col->data[i]);
+    }
+}
+
+int number_occ(COLUMN* col, int value) {
+    /* Initialisation du compteur */
+    int cpt = 0;
+
+    /* Parcours de toutes les données */
+    for (int i = 0 ; i < col->T_Logique ; i++) {
+        if (col->data[i] == value)
+            cpt++;
+    }
+
+    return  cpt;
 }

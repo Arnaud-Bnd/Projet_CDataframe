@@ -20,12 +20,28 @@ typedef struct {
  */
 COLUMN *create_column(char* title);
 
-/* Insert a value in a column
- * @param1 : Column in which we add the value
- * @param2 : Value to add
- * @return : Returns 1 if insertion successful otherwise 0
+/* Add a new value to a column
+ * @param1 : Pointer to a column
+ * @param2 : The value to be added
+ * @return : 1 if the value is added 0 otherwise
  */
 int insert_value(COLUMN* col, int value);
 
+/* Free allocated memory
+ * @param1 : Pointer to a column
+ */
+void delete_column(COLUMN *col);
+
+/* Print a column content
+ * @param1 : Pointer to a column
+ */
+void print_col(COLUMN* col);
+
+/* Number of occurrences
+ *  @param1 : Pointer to a column
+ *  @param2 : Value to count
+ *  @return : Number of occurrences of the value
+ */
+int number_occ(COLUMN* col, int value);
 
 #endif //PROJET_CDATAFRAME_COLUMN_H

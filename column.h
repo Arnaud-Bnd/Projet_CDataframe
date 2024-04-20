@@ -2,8 +2,8 @@
 // Created by Arnaud Bernard on 28/03/2024.
 //
 
-#ifndef PROJET_CDATAFRAME_DATA_H
-#define PROJET_CDATAFRAME_DATA_H
+#ifndef PROJET_CDATAFRAME_COLUMN_H
+#define PROJET_CDATAFRAME_COLUMN_H
 
 typedef struct {
     char *title;
@@ -13,4 +13,7 @@ typedef struct {
 } COLUMN;
 
 COLUMN *create_column(char* title);
-#endif //PROJET_CDATAFRAME_DATA_H
+int insert_value(COLUMN* col, int value);
+
+
+#endif //PROJET_CDATAFRAME_COLUMN_H

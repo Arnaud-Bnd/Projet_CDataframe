@@ -61,6 +61,12 @@ build CMakeFiles/Projet_CDataframe.dir/data.c.o: C_COMPILER__Projet_CDataframe_u
   OBJECT_DIR = CMakeFiles/Projet_CDataframe.dir
   OBJECT_FILE_DIR = CMakeFiles/Projet_CDataframe.dir
 
+build CMakeFiles/Projet_CDataframe.dir/column.c.o: C_COMPILER__Projet_CDataframe_unscanned_Debug /Users/arnaudbernard/Documents/01$ -$ Efrei/Année$ 1/S2/Algorithmique$ et$ structure$ de$ données/Projet-CDataframe/column.c || cmake_object_order_depends_target_Projet_CDataframe
+  DEP_FILE = CMakeFiles/Projet_CDataframe.dir/column.c.o.d
+  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/Projet_CDataframe.dir
+  OBJECT_FILE_DIR = CMakeFiles/Projet_CDataframe.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Projet_CDataframe
@@ -69,7 +75,7 @@ build CMakeFiles/Projet_CDataframe.dir/data.c.o: C_COMPILER__Projet_CDataframe_u
 #############################################
 # Link the executable Projet_CDataframe
 
-build Projet_CDataframe: C_EXECUTABLE_LINKER__Projet_CDataframe_Debug CMakeFiles/Projet_CDataframe.dir/main.c.o CMakeFiles/Projet_CDataframe.dir/data.c.o
+build Projet_CDataframe: C_EXECUTABLE_LINKER__Projet_CDataframe_Debug CMakeFiles/Projet_CDataframe.dir/main.c.o CMakeFiles/Projet_CDataframe.dir/data.c.o CMakeFiles/Projet_CDataframe.dir/column.c.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk
   OBJECT_DIR = CMakeFiles/Projet_CDataframe.dir
   POST_BUILD = :

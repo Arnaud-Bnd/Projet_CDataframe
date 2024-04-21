@@ -1,6 +1,6 @@
 Pour répartir équitablement les tâches entre les deux membres de l'équipe, nous pourrions envisager 
 une répartition basée sur les domaines d'expertise, les préférences personnelles et les disponibilités 
-de chacun. Voici une suggestion de répartition des tâches :
+de chacun.
 
 Sami :
 
@@ -26,10 +26,9 @@ Arnaud :
 -Accès et remplacement de la valeur dans une cellule du CDataframe.
 
 Tests unitaires : Écriture de tests pour valider le bon fonctionnement des fonctions implémentées.
-En divisant les tâches de cette manière, chaque membre de l'équipe peut se concentrer sur un ensemble 
-de fonctionnalités spécifiques tout en contribuant de manière significative à l'ensemble du projet. 
+En divisant les tâches de cette manière.
 Il est également important de maintenir une communication ouverte tout au long du processus pour 
-résoudre les problèmes et les défis qui pourraient survenir.
+résoudre les problèmes et les défis qui pourraient survenir, on a donc communiquer par whatsapp pour s'organiser correctement
 
 lien vers le gitub :
 

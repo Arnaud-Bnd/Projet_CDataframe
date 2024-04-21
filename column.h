@@ -14,11 +14,13 @@ typedef struct {
 
 #define REALLOC_SIZE 256
 
+
 /* Create a column
  * @param1 : Column title
  * @return : Pointer to created column
  */
 COLUMN *create_column(char* title);
+
 
 /* Add a new value to a column
  * @param1 : Pointer to a column
@@ -27,15 +29,18 @@ COLUMN *create_column(char* title);
  */
 int insert_value(COLUMN* col, int value);
 
+
 /* Free allocated memory
  * @param1 : Pointer to a column
  */
 void delete_column(COLUMN *col);
 
+
 /* Print a column content
  * @param1 : Pointer to a column
  */
 void print_col(COLUMN* col);
+
 
 /* Number of occurrences
  *  @param1 : Pointer to a column
@@ -44,12 +49,14 @@ void print_col(COLUMN* col);
  */
 int number_occ(COLUMN* col, int value);
 
+
 /* Value at position x
  * @param1 : Pointer to a column
  * @param2 : Position
  * @return : The value at the position x
  */
 int val_at_pos(COLUMN* col, int pos);
+
 
 /* Number of value > x
  * @param1 : Pointer to a column
@@ -58,12 +65,14 @@ int val_at_pos(COLUMN* col, int pos);
  */
 int greater_than(COLUMN* col, int x);
 
+
 /* Number of value < x
  * @param1 : Pointer to a column
  * @param2 : X
  * @return : Number of value less than x
  */
 int less_than(COLUMN* col, int x);
+
 
 /* Number of value = x
  * @param1 : Pointer to a column

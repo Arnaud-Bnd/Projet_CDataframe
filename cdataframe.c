@@ -27,7 +27,7 @@ int insert_column(CDATAFRAME* cdt, COLUMN** column) {
         return 1;
     }
 
-        /* S'il n'y a plus de place, faire une réallocation */
+    /* S'il n'y a plus de place, faire une réallocation */
     else if (cdt->T_Physique == cdt->T_Logique) {
         /* Réallocation */
         cdt->T_Physique += sizeof (COLUMN*);
@@ -38,13 +38,13 @@ int insert_column(CDATAFRAME* cdt, COLUMN** column) {
         return 1;
     }
 
-        /* Insertion de la valeur */
+    /* Insertion de la valeur */
     else if (cdt->T_Physique != cdt->T_Logique) {
         cdt->column[(cdt->T_Logique)++] = (COLUMN*) &column;
         return 1;
     }
 
-        /* Retourner 0 si l'insertion n'a pas été faite */
+    /* Retourner 0 si l'insertion n'a pas été faite */
     else {
         return 0;
     }

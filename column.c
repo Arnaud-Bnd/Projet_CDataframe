@@ -27,7 +27,7 @@ int insert_value(COLUMN* col, int value) {
         return 1;
     }
 
-        /* S'il n'y a plus de place, faire une réallocation */
+    /* S'il n'y a plus de place, faire une réallocation */
     else if (col->T_Physique == col->T_Logique) {
         /* Réallocation */
         col->T_Physique += REALLOC_SIZE;
@@ -37,13 +37,13 @@ int insert_value(COLUMN* col, int value) {
         return 1;
     }
 
-        /* Insertion de la valeur */
+    /* Insertion de la valeur */
     else if (col->T_Physique != col->T_Logique) {
         col->data[(col->T_Logique)++] = value;
         return 1;
     }
 
-        /* Retourner 0 si l'insertion n'a pas été faite */
+    /* Retourner 0 si l'insertion n'a pas été faite */
     else {
         return 0;
     }

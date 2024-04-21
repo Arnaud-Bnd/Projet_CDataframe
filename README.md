@@ -4,7 +4,7 @@
 * Arnaud BERNARD
 * Sami BENABDALLAH
 
-### **[Lien du Git](https://github.com/Arnaud-Bnd/Projet_CDataframe/tree/main)**
+### **[Lien du Git](https://github.com/Arnaud-Bnd/Projet_CDataframe)**
 
 ---
 

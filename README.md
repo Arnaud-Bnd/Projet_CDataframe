@@ -7,8 +7,10 @@
 ### **[Lien du Git](https://github.com/Arnaud-Bnd/Projet_CDataframe/tree/main)**
 
 ---
+
 Nous avons choisi, pour notre projet, de faire un CDataframe dont les colonnes ne contiennent uniquement des données de types entiers, un CDataframe fait à partir d'un tableau dynamique.
 Enfin, pour les fonctionnalités, nous hésitons encore entre des fonctionnalités basiques et des fonctionnalités avancées, bien que notre choix se porte pour l'instant d'avantage sur la deuxième option.
+
 ---
 Pour répartir équitablement les tâches entre les deux membres de l'équipe, nous pourrions envisager une répartition basée sur les domaines d'expertise, les préférences personnelles et les disponibilités de chacun.
 

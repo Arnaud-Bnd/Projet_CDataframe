@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 CDATAFRAME *create_cdataframe(char* title) {
-    CDATAFRAME* cdataframe = (CDATAFRAME*) malloc(sizeof * cdataframe);
+    CDATAFRAME* cdataframe = (CDATAFRAME*) malloc(sizeof (CDATAFRAME));
     cdataframe->title = title;
     cdataframe->T_Logique = 0;
     cdataframe->T_Physique = 0;
@@ -19,7 +19,7 @@ int insert_column(CDATAFRAME* cdt, COLUMN** column) {
     /* Si la colonne n'a pas encore été utilisé, faire une allocation */
     if (cdt->column == NULL) {
         /* Allocation */
-        cdt->column = (COLUMN **) malloc(sizeof(COLUMN*));
+        cdt->column = (COLUMN**) malloc(sizeof(COLUMN*));
         cdt->T_Physique += sizeof (COLUMN*);
         /* Insertion de la valeur */
         cdt->column[cdt->T_Logique] = (COLUMN*) &column;

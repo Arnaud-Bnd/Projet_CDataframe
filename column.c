@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 COLUMN *create_column(char* title) {
     COLUMN* column = (COLUMN *) malloc(sizeof (COLUMN));
     column->title = title;
@@ -16,19 +17,36 @@ COLUMN *create_column(char* title) {
     return column;
 }
 
+
 int insert_value(COLUMN* col, int value) {
+    /* Vérification du pointeur colonne */
+    if (col == NULL) {
+        printf("Column pointer is NULL\n");
+        return 0;
+    }
+
     /* Si la colonne n'a pas encore été utilisé, faire une allocation */
     if (col->data == NULL) {
         col->T_Physique += REALLOC_SIZE * sizeof (int);
         col->data = (int*) malloc(col->T_Physique);
-        return 0;
+
+        /* Vérification de la bonne allocation */
+        if (col->data == NULL) {
+            printf("Memory allocation failed\n");
+            return 0;
+        }
     }
 
     /* S'il n'y a plus de place, faire une réallocation */
     else if (col->T_Physique == col->T_Logique) {
         col->T_Physique += REALLOC_SIZE * sizeof (int);
-        realloc(col->data, col->T_Physique);
-        return 0;
+        col->data = realloc(col->data, col->T_Physique);
+
+        /* Vérification de la bonne réallocation) */
+        if (col->T_Physique == col->T_Logique) {
+            printf("Memory reallocation failed\n");
+            return 0;
+        }
     }
 
     /* S'il y a assez de place, insérer la valeur */
@@ -36,7 +54,14 @@ int insert_value(COLUMN* col, int value) {
     return 1;
 }
 
+
 void delete_column(COLUMN *col) {
+    /* Vérification du pointeur colonne */
+    if (col == NULL) {
+        printf("Column pointer is already NULL\n");
+        return;
+    }
+
     /* Libère la mémoire allouée au tableau de donnée */
     col->T_Physique = 0;
     col->T_Logique = 0;
@@ -52,7 +77,14 @@ void delete_column(COLUMN *col) {
     col = NULL;
 }
 
+
 void print_col(COLUMN* col) {
+    /* Vérification du pointeur colonne */
+    if (col == NULL) {
+        printf("Column pointer is NULL\n");
+        return;
+    }
+
     /* Afficher le titre de la colonne */
     printf("\n%s \n", col->title);
 
@@ -63,7 +95,14 @@ void print_col(COLUMN* col) {
     printf("\n");
 }
 
+
 int number_occ(COLUMN* col, int value) {
+    /* Vérification du pointeur colonne */
+    if (col == NULL) {
+        printf("Column pointer is NULL\n");
+        return 0;
+    }
+
     /* Initialisation du compteur */
     int cpt = 0;
 
@@ -76,7 +115,14 @@ int number_occ(COLUMN* col, int value) {
     return  cpt;
 }
 
+
 int val_at_pos(COLUMN* col, int pos) {
+    /* Vérification du pointeur colonne */
+    if (col == NULL) {
+        printf("Column pointer is NULL\n");
+        return 0;
+    }
+
     /* Vérifie que la position fait partie du tableau */
     if (pos <= col->T_Logique)
         return col->data[pos];
@@ -85,7 +131,14 @@ int val_at_pos(COLUMN* col, int pos) {
     return (int) NULL;
 }
 
+
 int greater_than(COLUMN* col, int x) {
+    /* Vérification du pointeur colonne */
+    if (col == NULL) {
+        printf("Column pointer is NULL\n");
+        return 0;
+    }
+
     /* Initialisation du compteur */
     int cpt = 0;
 
@@ -98,7 +151,14 @@ int greater_than(COLUMN* col, int x) {
     return  cpt;
 }
 
+
 int less_than(COLUMN* col, int x) {
+    /* Vérification du pointeur colonne */
+    if (col == NULL) {
+        printf("Column pointer is NULL\n");
+        return 0;
+    }
+
     /* Initialisation du compteur */
     int cpt = 0;
 
@@ -111,7 +171,14 @@ int less_than(COLUMN* col, int x) {
     return  cpt;
 }
 
+
 int equal_to(COLUMN* col, int x) {
+    /* Vérification du pointeur colonne */
+    if (col == NULL) {
+        printf("Column pointer is NULL\n");
+        return 0;
+    }
+
     /* Initialisation du compteur */
     int cpt = 0;
 

@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 CDATAFRAME *create_cdataframe(char* title) {
     CDATAFRAME *cdataframe = (CDATAFRAME *) malloc(sizeof (CDATAFRAME));
     cdataframe->title = title;
@@ -17,6 +18,12 @@ CDATAFRAME *create_cdataframe(char* title) {
 
 
 void user_input(CDATAFRAME* cdt) {
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("CDataframe pointer is NULL\n");
+        return;
+    }
+
     /* Initialisation de la variable qui vérifie les insertions */
     int verif;
 
@@ -71,63 +78,45 @@ void user_input(CDATAFRAME* cdt) {
 
 CDATAFRAME *hard_filling(){
     // Création d'un CDataframe
-    CDATAFRAME *hfd = create_cdataframe("Hard Filling Dataframe");
+    CDATAFRAME *cdt = create_cdataframe("Hard Filling Dataframe");
 
-    int verif; // Variable qui vérifie qu'une colonne a bien été insérée
-
-    // 1ère colonne
     COLUMN *col1 = create_column("Colonne 1");
-    col1->T_Physique = 3;
-    col1->T_Logique = 3;
-    col1->data = (int *) malloc(3 * sizeof (int));
+    insert_value(col1, 1);
+    insert_value(col1, 2);
+    insert_value(col1, 3);
+    insert_column(cdt, col1);
 
-    col1->data[0] = 1;
-    col1->data[1] = 4;
-    col1->data[2] = 7;
-
-    do {
-        verif = insert_column(hfd, col1);
-    } while (verif == 0);
-
-    // 2ème colonne
     COLUMN *col2 = create_column("Colonne 2");
-    col2->T_Physique = 3;
-    col2->T_Logique = 3;
-    col2->data = (int *) malloc(3 * sizeof (int));
+    insert_value(col2, 4);
+    insert_value(col2, 5);
+    insert_value(col2, 6);
+    insert_column(cdt, col2);
 
-    col2->data[0] = 2;
-    col2->data[1] = 5;
-    col2->data[2] = 8;
-
-    do {
-        verif = insert_column(hfd, col2);
-    } while (verif == 0);
-
-    // 3ème colonne
     COLUMN *col3 = create_column("Colonne 3");
-    col3->T_Physique = 3;
-    col3->T_Logique = 3;
-    col3->data = (int *) malloc(3 * sizeof (int));
+    insert_value(col3, 7);
+    insert_value(col3, 8);
+    insert_value(col3, 9);
+    insert_column(cdt, col3);
 
-    col3->data[0] = 3;
-    col3->data[1] = 6;
-    col3->data[2] = 9;
-
-    /*
-    // printf("Nombre de colonne : %d\n", hfd->num_columns);
-    do {
-        verif = insert_column(hfd, col3);
-    } while (verif == 0);
-    // printf("Nombre de colonne : %d\n", hfd->num_columns);
-    */
-
-    return hfd;
+    return cdt;
 }
 
 
 void print_cdt(CDATAFRAME *cdt){
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("CDataframe pointer is NULL\n");
+        return;
+    }
+
     /* Afficher le titre du CDataframe */
     printf("%s\n", cdt->title);
+
+    /* Vérification du nombre de colonnes */
+    if (cdt->num_columns == 0) {
+        printf("CDataframe has no columns\n");
+        return;
+    }
 
     /* Boucle pour les titres des colonnes */
     printf("\t\t");
@@ -162,6 +151,12 @@ void print_cdt(CDATAFRAME *cdt){
 void print_lines(CDATAFRAME *cdt, int x, int y){
     /* Afficher le titre du CDataframe */
     printf("%s\n", (char *) cdt->title);
+
+    /* Vérification du nombre de colonnes */
+    if (cdt->num_columns == 0) {
+        printf("CDataframe has no columns\n");
+        return;
+    }
 
     /* Boucle pour les titres des colonnes */
     for (int i = 0 ; i < cdt->num_columns ; i++) {
@@ -198,11 +193,17 @@ void print_lines(CDATAFRAME *cdt, int x, int y){
 
 
 int insert_column(CDATAFRAME* cdt, COLUMN* column) {
+    /* Vérification de la taille du CDataframe et de la colonne */
+    if (cdt == NULL || column == NULL) {
+        fprintf(stderr, "CDataframe or column pointer is NULL\n");
+        return 0;
+    }
+
     /* Si la colonne n'a pas encore été utilisée, faire une allocation */
     if (cdt->column == NULL) {
         cdt->column = (COLUMN **) malloc(sizeof (COLUMN *));
         if (cdt->column == NULL) {
-            fprintf(stderr, "Memory allocation failed\n");
+            printf("Memory allocation failed\n");
             return 0;
         }
     }
@@ -224,8 +225,13 @@ int insert_column(CDATAFRAME* cdt, COLUMN* column) {
 }
 
 
-
 int replace_cell(CDATAFRAME* cdt, int index_l, int index_c, int value) {
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("CDataframe pointer is NULL\n");
+        return 0;
+    }
+
     /* Si la case n'existe pas retourner 0 */
     if (index_c < 1 || index_c > cdt->num_columns || index_l < 1 || index_l > number_of_lines(cdt))
         return 0;
@@ -238,6 +244,12 @@ int replace_cell(CDATAFRAME* cdt, int index_l, int index_c, int value) {
 
 
 void print_name_col(CDATAFRAME *cdt) {
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("CDataframe pointer is NULL\n");
+        return;
+    }
+
     /* Boucle pour les titres des colonnes */
     for (int i = 0 ; i < cdt->num_columns ; i++) {
         // Afficher le titre de la colonne
@@ -248,6 +260,12 @@ void print_name_col(CDATAFRAME *cdt) {
 
 
 int number_of_lines(CDATAFRAME *cdt) {
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("CDataframe pointer is NULL\n");
+        return 0;
+    }
+
     int max = 0;
 
     /* Recherche de la colonne avec le plus de lignes */
@@ -261,11 +279,23 @@ int number_of_lines(CDATAFRAME *cdt) {
 
 
 int number_of_cols(CDATAFRAME *cdt) {
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("CDataframe pointer is NULL\n");
+        return 0;
+    }
+
     return cdt->num_columns;
 }
 
 
 int cell_equal_to(CDATAFRAME *cdt, int x) {
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("CDataframe pointer is NULL\n");
+        return 0;
+    }
+
     /* Initialisation du compteur à 0 */
     int cpt = 0;
 
@@ -282,6 +312,12 @@ int cell_equal_to(CDATAFRAME *cdt, int x) {
 
 
 int cell_greater_than(CDATAFRAME *cdt, int x) {
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("CDataframe pointer is NULL\n");
+        return 0;
+    }
+
     /* Initialisation du compteur à 0 */
     int cpt = 0;
 
@@ -298,6 +334,12 @@ int cell_greater_than(CDATAFRAME *cdt, int x) {
 
 
 int cell_less_than(CDATAFRAME *cdt, int x) {
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("CDataframe pointer is NULL\n");
+        return 0;
+    }
+
     /* Initialisation du compteur à 0 */
     int cpt = 0;
 

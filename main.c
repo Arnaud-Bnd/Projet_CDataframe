@@ -8,9 +8,9 @@ int main() {
 
     print_cdt(cdt);
 
-    replace_cell(cdt, 1, 1, 18);
+    //replace_cell(cdt, 1, 1, 18);
 
-    print_cdt(cdt);
+    //print_cdt(cdt);
 
     return 0;
 }

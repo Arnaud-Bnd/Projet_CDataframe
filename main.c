@@ -4,13 +4,11 @@
 #include "cdataframe.h"
 
 int main() {
-    CDATAFRAME *cdt = hard_filling();
+    CDATAFRAME *cdt = create_cdataframe("Test");
+
+    user_input(cdt);
 
     print_cdt(cdt);
-
-    //replace_cell(cdt, 1, 1, 18);
-
-    //print_cdt(cdt);
 
     return 0;
 }

@@ -130,17 +130,14 @@ void print_cdt(CDATAFRAME *cdt){
     int max_rows = number_of_lines(cdt);
 
     /* Boucle pour les valeurs des colonnes */
-    for (int j = 0 ; j < max_rows ; j++){ // Variation de la ligne
+    for (int j = 0 ; j < max_rows ; j++){   // Variation de la ligne
         /* Afficher le numéro de la ligne */
         printf("[%d]\t\t", j + 1);
 
         /* Afficher les valeurs */
-        for (int i = 0; i < cdt->num_columns; i++) {    // Variation de la colonne
-            if (i < cdt->column[i]->T_Logique)
+        for (int i = 0 ; i < cdt->num_columns ; i++) {    // Variation de la colonne
                 // Afficher la valeur
                 printf("%d\t\t\t\t", cdt->column[i]->data[j]);
-            else
-                printf("\t\t\t\t");
         }
         printf("\n"); // Passage à la ligne suivante
     }

@@ -9,8 +9,7 @@
 
 typedef struct {
     char *title;
-    int T_Logique;
-    int T_Physique;
+    int num_columns;
     COLUMN **column;
 } CDATAFRAME;
 
@@ -20,12 +19,15 @@ typedef struct {
  */
 CDATAFRAME *create_cdataframe(char* title);
 
-/* Add a new column to a CDataframe
+
+/* Insert user input in a CDataframe
  * @param1 : Pointer to a CDataframe
- * @param2 : Pointer to a column to be added
- * @return : 1 if the column is added 0 otherwise
  */
-int insert_column(CDATAFRAME* cdt, COLUMN** column);
+void user_input(CDATAFRAME* cdt);
+
+
+/* Hard filling of CDataframe */
+CDATAFRAME *hard_filling();
 
 
 /* Print a CDataframe content
@@ -36,9 +38,10 @@ void print_cdt(CDATAFRAME* cdt);
 
 /* Print lines of the CDataframe
  * @param1 : Pointer to a CDataframe
- * @param2 : number of line limits
+ * @param2 : Starting line number
+ * @param3 : End line number
  */
-void print_lines(CDATAFRAME* cdt, int lim);
+void print_lines(CDATAFRAME* cdt, int x, int y);
 
 
 /* Print columns of the CDataframe
@@ -61,6 +64,14 @@ int insert_line(CDATAFRAME* cdt);
  * @return : 1 if the line is deleted 0 otherwise
  */
 int delete_line(CDATAFRAME* cdt, int index);
+
+
+/* Add a new column to a CDataframe
+ * @param1 : Pointer to a CDataframe
+ * @param2 : Pointer to a column to be added
+ * @return : 1 if the column is added 0 otherwise
+ */
+int insert_column(CDATAFRAME* cdt, COLUMN* column);
 
 
 /* Delete column in the CDataframe

@@ -7,7 +7,7 @@
 #include <string.h>
 
 COLUMN *create_column(char* title) {
-    COLUMN* column = (COLUMN*) malloc(sizeof * column);
+    COLUMN* column = (COLUMN *) malloc(sizeof (COLUMN));
     column->title = title;
     column->T_Logique = 0;
     column->T_Physique = 0;
@@ -19,50 +19,37 @@ COLUMN *create_column(char* title) {
 int insert_value(COLUMN* col, int value) {
     /* Si la colonne n'a pas encore été utilisé, faire une allocation */
     if (col->data == NULL) {
-        /* Allocation */
-        col->data = (COLUMN*) malloc(REALLOC_SIZE);
-        col->T_Physique += REALLOC_SIZE;
-        /* Insertion de la valeur */
-        col->data[(col->T_Logique)++] = value;
-        return 1;
+        col->T_Physique += REALLOC_SIZE * sizeof (int);
+        col->data = (int*) malloc(col->T_Physique);
+        return 0;
     }
 
     /* S'il n'y a plus de place, faire une réallocation */
     else if (col->T_Physique == col->T_Logique) {
-        /* Réallocation */
-        col->T_Physique += REALLOC_SIZE;
+        col->T_Physique += REALLOC_SIZE * sizeof (int);
         realloc(col->data, col->T_Physique);
-        /* Insertion de la valeur */
-        col->data[(col->T_Logique)++] = value;
-        return 1;
-    }
-
-    /* Insertion de la valeur */
-    else if (col->T_Physique != col->T_Logique) {
-        col->data[(col->T_Logique)++] = value;
-        return 1;
-    }
-
-    /* Retourner 0 si l'insertion n'a pas été faite */
-    else {
         return 0;
     }
+
+    /* S'il y a assez de place, insérer la valeur */
+    col->data[(col->T_Logique)++] = value;
+    return 1;
 }
 
 void delete_column(COLUMN *col) {
     /* Libère la mémoire allouée au tableau de donnée */
     col->T_Physique = 0;
     col->T_Logique = 0;
-    col->data = NULL;
     free(col->data);
+    col->data = NULL;
 
     /* Libère la mémoire allouée au titre de la colonne */
-    col->title = NULL;
     free(col->title);
+    col->title = NULL;
 
     /* Libère la mémoire allouée à la colonne */
-    col = NULL;
     free(col);
+    col = NULL;
 }
 
 void print_col(COLUMN* col) {

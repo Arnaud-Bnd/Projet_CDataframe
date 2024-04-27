@@ -58,7 +58,7 @@ void print_col(COLUMN* col) {
 
     /* Afficher les données de la colonne */
     for (int i = 0 ; i < col->T_Logique ; i++) {
-        printf("[%d]\t %d \n", i, col->data[i]);
+        printf("[%d]\t %d \n", i + 1, col->data[i]);
     }
     printf("\n");
 }

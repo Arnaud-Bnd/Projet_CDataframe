@@ -17,6 +17,9 @@ CDATAFRAME *create_cdataframe(char* title) {
 
 
 void user_input(CDATAFRAME* cdt) {
+    /* Initialisation de la variable qui vérifie les insertions */
+    int verif;
+
     // Saisie du nombre de colonnes souhaitées
     int nbr_col;
     printf("Saisir le nombre de colonnes que vous souhaitez : ");
@@ -25,7 +28,7 @@ void user_input(CDATAFRAME* cdt) {
     } while (nbr_col <= 0);
     printf("\n");
 
-    // Boucle pour ajout d'une colonne
+    // Boucle pour ajouter une colonne
     for (int i = 0; i < nbr_col; i++) {
         // Saisie du nom de la colonne
         char name_col[50];
@@ -49,15 +52,19 @@ void user_input(CDATAFRAME* cdt) {
             int value;
             printf("Saisir la %d-ième valeur : ", j + 1);
             scanf("%d", &value);
-            printf("Bonjour");
+
             // Insertion de la valeur
-            insert_value((COLUMN *) &new_col->data[i], value);
-            // printf("%d", cdt->column[i]->data[j]);
+            do {
+                verif = insert_value(new_col, value);
+            } while (verif == 0);
+
             printf("\n");
         }
 
         // Insertion de la colonne
-        insert_column(cdt, new_col);
+        do {
+            verif = insert_column(cdt, new_col);
+        } while (verif == 0);
     }
 }
 
@@ -107,11 +114,11 @@ CDATAFRAME *hard_filling(){
     col3->data[2] = 9;
 
     /*
-    printf("Nombre de colonne : %d\n", hfd->num_columns);
+    // printf("Nombre de colonne : %d\n", hfd->num_columns);
     do {
         verif = insert_column(hfd, col3);
     } while (verif == 0);
-    printf("Nombre de colonne : %d\n", hfd->num_columns);
+    // printf("Nombre de colonne : %d\n", hfd->num_columns);
     */
 
     return hfd;
@@ -123,21 +130,28 @@ void print_cdt(CDATAFRAME *cdt){
     printf("%s\n", cdt->title);
 
     /* Boucle pour les titres des colonnes */
+    printf("\t\t");
     for (int i = 0 ; i < cdt->num_columns ; i++) {
         // Afficher le titre de la colonne
-        printf("\t\t%s", cdt->column[i]->title);
+        printf("%s\t\t", (char *) cdt->column[i]->title);
     }
     printf("\n");
 
+    /* Trouver la colonne avec le plus de lignes */
+    int max_rows = number_of_lines(cdt);
+
     /* Boucle pour les valeurs des colonnes */
-    for (int j = 0 ; j < cdt->column[0]->T_Logique ; j++){ // Variation de la ligne
+    for (int j = 0 ; j < max_rows ; j++){ // Variation de la ligne
         /* Afficher le numéro de la ligne */
-        printf("[%d]\t\t", j);
+        printf("[%d]\t\t", j + 1);
 
         /* Afficher les valeurs */
         for (int i = 0; i < cdt->num_columns; i++) {    // Variation de la colonne
-            // Afficher la valeur
-            printf("%d\t\t\t\t", cdt->column[i]->data[j]);
+            if (i < cdt->column[i]->T_Logique)
+                // Afficher la valeur
+                printf("%d\t\t\t\t", cdt->column[i]->data[j]);
+            else
+                printf("\t\t\t\t");
         }
         printf("\n"); // Passage à la ligne suivante
     }
@@ -147,7 +161,7 @@ void print_cdt(CDATAFRAME *cdt){
 
 void print_lines(CDATAFRAME *cdt, int x, int y){
     /* Afficher le titre du CDataframe */
-    printf("%s\n", cdt->title);
+    printf("%s\n", (char *) cdt->title);
 
     /* Boucle pour les titres des colonnes */
     for (int i = 0 ; i < cdt->num_columns ; i++) {
@@ -184,18 +198,27 @@ void print_lines(CDATAFRAME *cdt, int x, int y){
 
 
 int insert_column(CDATAFRAME* cdt, COLUMN* column) {
-
-    /* Si la colonne n'a pas encore été utilisé, faire une allocation */
+    /* Si la colonne n'a pas encore été utilisée, faire une allocation */
     if (cdt->column == NULL) {
         cdt->column = (COLUMN **) malloc(sizeof (COLUMN *));
-        return 0;
+        if (cdt->column == NULL) {
+            fprintf(stderr, "Memory allocation failed\n");
+            return 0;
+        }
     }
 
     /* Sinon faire une réallocation (toujours à la bonne taille) */
-    realloc(cdt->column, (cdt->num_columns + 1) * sizeof (COLUMN *));
+    else {
+        cdt->column = realloc(cdt->column, (cdt->num_columns + 1) * sizeof (COLUMN *));
+    }
 
-    /* Insertion de la valeur */
-    cdt->column[(cdt->num_columns)++] = column;
+    // Dupliquer le titre de la colonne avant de l'insérer
+    char *col_title = (char *) malloc(strlen(column->title) + 1);
+    strcpy(col_title, column->title);
+    column->title = col_title;
+
+    // Insertion de la colonne dans le CDataframe
+    cdt->column[cdt->num_columns++] = column;
 
     return 1;
 }
@@ -204,7 +227,7 @@ int insert_column(CDATAFRAME* cdt, COLUMN* column) {
 
 int replace_cell(CDATAFRAME* cdt, int index_l, int index_c, int value) {
     /* Si la case n'existe pas retourner 0 */
-    if (index_c < 1 || index_c > cdt->num_columns || index_l < 1 || index_l > cdt->column[index_c])
+    if (index_c < 1 || index_c > cdt->num_columns || index_l < 1 || index_l > number_of_lines(cdt))
         return 0;
 
     /* Sinon remplacer la valeur et retourner 1 */

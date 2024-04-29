@@ -1,0 +1,15 @@
+Index: cmake-build-debug/.ninja_log
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># ninja log v5\n53\t92\t1713629643081418408\tProjet_CDataframe\t1a76cbbe8e1fc6b4\n0\t414\t1712047948721104912\tCMakeFiles/Projet_CDataframe.dir/data.c.o\tdb3311627e494b45\n1\t43\t1713629643033138624\tCMakeFiles/Projet_CDataframe.dir/main.c.o\t2f98e50d9edddd36\n0\t82\t1713646904662773602\tbuild.ninja\t411449c2c9e6d002\n1\t53\t1713629643042336236\tCMakeFiles/Projet_CDataframe.dir/column.c.o\tdef55238312b96fb\n
+===================================================================
+diff --git a/cmake-build-debug/.ninja_log b/cmake-build-debug/.ninja_log
+--- a/cmake-build-debug/.ninja_log	
++++ b/cmake-build-debug/.ninja_log	
+@@ -2,5 +2,5 @@
+ 53	92	1713629643081418408	Projet_CDataframe	1a76cbbe8e1fc6b4
+ 0	414	1712047948721104912	CMakeFiles/Projet_CDataframe.dir/data.c.o	db3311627e494b45
+ 1	43	1713629643033138624	CMakeFiles/Projet_CDataframe.dir/main.c.o	2f98e50d9edddd36
+-0	82	1713646904662773602	build.ninja	411449c2c9e6d002
++0	82	1713647112366735417	build.ninja	411449c2c9e6d002
+ 1	53	1713629643042336236	CMakeFiles/Projet_CDataframe.dir/column.c.o	def55238312b96fb

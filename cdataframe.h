@@ -5,13 +5,16 @@
 #ifndef PROJET_CDATAFRAME_CDATAFRAME_H
 #define PROJET_CDATAFRAME_CDATAFRAME_H
 
+
 #include "column.h"
+
 
 typedef struct {
     char *title;
     int num_columns;
     COLUMN **column;
 } CDATAFRAME;
+
 
 /* Create a CDataframe
  * @param1 : CDataframe title

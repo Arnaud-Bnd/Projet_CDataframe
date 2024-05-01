@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 #include <string.h>
 
 
@@ -18,11 +19,10 @@ CDATAFRAME *create_cdataframe(char* title) {
 }
 
 
-
 void user_input(CDATAFRAME* cdt) {
     /* Vérification de la taille du CDataframe */
     if (cdt == NULL) {
-        printf("CDataframe pointer is NULL\n");
+        printf("Le pointeur CDataframe est NULL.\n");
         return;
     }
 
@@ -107,7 +107,7 @@ CDATAFRAME *hard_filling(){
 void print_cdt(CDATAFRAME *cdt){
     /* Vérification de la taille du CDataframe */
     if (cdt == NULL) {
-        printf("CDataframe pointer is NULL\n");
+        printf("Le pointeur CDataframe est NULL.\n");
         return;
     }
 
@@ -116,7 +116,7 @@ void print_cdt(CDATAFRAME *cdt){
 
     /* Vérification du nombre de colonnes */
     if (cdt->num_columns == 0) {
-        printf("CDataframe has no columns\n");
+        printf("Le CDataframe n'a pas de colonnes.\n");
         return;
     }
 
@@ -153,7 +153,7 @@ void print_lines(CDATAFRAME *cdt, int x, int y){
 
     /* Vérification du nombre de colonnes */
     if (cdt->num_columns == 0) {
-        printf("CDataframe has no columns\n");
+        printf("Le CDataframe n'a pas de colonnes.\n");
         return;
     }
 
@@ -194,7 +194,7 @@ void print_lines(CDATAFRAME *cdt, int x, int y){
 int insert_column(CDATAFRAME* cdt, COLUMN* column) {
     /* Vérification de la taille du CDataframe et de la colonne */
     if (cdt == NULL || column == NULL) {
-        fprintf(stderr, "CDataframe or column pointer is NULL\n");
+        fprintf(stderr, "Le pointeur CDataframe ou colonne est NULL.\n");
         return 0;
     }
 
@@ -202,7 +202,7 @@ int insert_column(CDATAFRAME* cdt, COLUMN* column) {
     if (cdt->column == NULL) {
         cdt->column = (COLUMN **) malloc(sizeof (COLUMN *));
         if (cdt->column == NULL) {
-            printf("Memory allocation failed\n");
+            printf("Échec de la réallocation de la mémoire.\n");
             return 0;
         }
     }
@@ -227,7 +227,7 @@ int insert_column(CDATAFRAME* cdt, COLUMN* column) {
 int replace_cell(CDATAFRAME* cdt, int index_l, int index_c, int value) {
     /* Vérification de la taille du CDataframe */
     if (cdt == NULL) {
-        printf("CDataframe pointer is NULL\n");
+        printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
@@ -245,7 +245,7 @@ int replace_cell(CDATAFRAME* cdt, int index_l, int index_c, int value) {
 void print_name_col(CDATAFRAME *cdt) {
     /* Vérification de la taille du CDataframe */
     if (cdt == NULL) {
-        printf("CDataframe pointer is NULL\n");
+        printf("Le pointeur CDataframe est NULL.\n");
         return;
     }
 
@@ -261,7 +261,7 @@ void print_name_col(CDATAFRAME *cdt) {
 int number_of_lines(CDATAFRAME *cdt) {
     /* Vérification de la taille du CDataframe */
     if (cdt == NULL) {
-        printf("CDataframe pointer is NULL\n");
+        printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
@@ -280,7 +280,7 @@ int number_of_lines(CDATAFRAME *cdt) {
 int number_of_cols(CDATAFRAME *cdt) {
     /* Vérification de la taille du CDataframe */
     if (cdt == NULL) {
-        printf("CDataframe pointer is NULL\n");
+        printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
@@ -291,11 +291,11 @@ int number_of_cols(CDATAFRAME *cdt) {
 int cell_equal_to(CDATAFRAME *cdt, int x) {
     /* Vérification de la taille du CDataframe */
     if (cdt == NULL) {
-        printf("CDataframe pointer is NULL\n");
+        printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
-    /* Initialisation du compteur à 0 */
+    /* Initialisation du compteur à 0. */
     int cpt = 0;
 
     /* Parcours des valeurs */
@@ -313,11 +313,11 @@ int cell_equal_to(CDATAFRAME *cdt, int x) {
 int cell_greater_than(CDATAFRAME *cdt, int x) {
     /* Vérification de la taille du CDataframe */
     if (cdt == NULL) {
-        printf("CDataframe pointer is NULL\n");
+        printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
-    /* Initialisation du compteur à 0 */
+    /* Initialisation du compteur à 0. */
     int cpt = 0;
 
     /* Parcours des valeurs */
@@ -335,11 +335,11 @@ int cell_greater_than(CDATAFRAME *cdt, int x) {
 int cell_less_than(CDATAFRAME *cdt, int x) {
     /* Vérification de la taille du CDataframe */
     if (cdt == NULL) {
-        printf("CDataframe pointer is NULL\n");
+        printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
-    /* Initialisation du compteur à 0 */
+    /* Initialisation du compteur à 0. */
     int cpt = 0;
 
     /* Parcours des valeurs */

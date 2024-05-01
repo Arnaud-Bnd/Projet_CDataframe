@@ -5,14 +5,26 @@
 #ifndef PROJET_CDATAFRAME_COLUMN_H
 #define PROJET_CDATAFRAME_COLUMN_H
 
+
+#define REALLOC_SIZE 256
+
+
 typedef struct {
     char *title;
     int T_Logique;
     int T_Physique;
     int *data;
+    unsigned long long *index;
+    // Index valid
+    // 0 : no index
+    // -1 : invalid index
+    // 1 : valid index
+    int valid_index;
+    // direction de tri : Ascendant ou Descendant
+    // 0 : ASC
+    // 1 : DESC
+    int sort_dir;
 } COLUMN;
-
-#define REALLOC_SIZE 256
 
 
 /* Create a column
@@ -53,7 +65,7 @@ int number_occ(COLUMN* col, int value);
 /* Value at position x
  * @param1 : Pointer to a column
  * @param2 : Position
- * @return : The value at the position x
+ * @return : The value at the position x or 0 if the value doesn't exist
  */
 int val_at_pos(COLUMN* col, int pos);
 
@@ -80,5 +92,6 @@ int less_than(COLUMN* col, int x);
  * @return : Number of value equal to x
  */
 int equal_to(COLUMN* col, int x);
+
 
 #endif //PROJET_CDATAFRAME_COLUMN_H

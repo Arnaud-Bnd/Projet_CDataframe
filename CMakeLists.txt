@@ -7,4 +7,6 @@ add_executable(Projet_CDataframe main.c
         column.c
         column.h
         cdataframe.h
-        cdataframe.c)
+        cdataframe.c
+        features.h
+        features.c)

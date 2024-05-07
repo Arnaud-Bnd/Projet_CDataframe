@@ -82,19 +82,19 @@ CDATAFRAME *hard_filling(){
     // Création d'un CDataframe
     CDATAFRAME *cdt = create_cdataframe("Hard Filling Dataframe");
 
-    COLUMN *col1 = create_column("Colonne 1");
+    COLUMN *col1 = create_column("Colonne-1");
     insert_value(col1, 1);
     insert_value(col1, 2);
     insert_value(col1, 3);
     insert_column(cdt, col1);
 
-    COLUMN *col2 = create_column("Colonne 2");
+    COLUMN *col2 = create_column("Colonne-2");
     insert_value(col2, 4);
     insert_value(col2, 5);
     insert_value(col2, 6);
     insert_column(cdt, col2);
 
-    COLUMN *col3 = create_column("Colonne 3");
+    COLUMN *col3 = create_column("Colonne-3");
     insert_value(col3, 7);
     insert_value(col3, 8);
     insert_value(col3, 9);
@@ -232,11 +232,12 @@ int replace_cell(CDATAFRAME* cdt, int index_l, int index_c, int value) {
     }
 
     /* Si la case n'existe pas retourner 0 */
-    if (index_c < 1 || index_c > cdt->num_columns || index_l < 1 || index_l > number_of_lines(cdt))
+    if (index_c < 0 || index_c >= cdt->num_columns || index_l < 0 || index_l >= number_of_lines(cdt)) {
+        printf("Cette cellule n'existe pas.\n");
         return 0;
-
+    }
     /* Sinon remplacer la valeur et retourner 1 */
-    cdt->column[index_c - 1]->data[index_l - 1] = value;
+    cdt->column[index_c]->data[index_l] = value;
 
     return 1;
 }

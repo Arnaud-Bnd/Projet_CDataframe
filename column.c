@@ -87,6 +87,8 @@ void print_col(COLUMN* col) {
         return;
     }
 
+    if (col->valid_index != 1)
+
     /* Afficher le titre de la colonne */
     printf("\n%s \n", col->title);
 

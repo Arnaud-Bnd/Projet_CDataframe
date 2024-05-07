@@ -69,4 +69,17 @@ void update_index(COLUMN *col);
 */
 int search_value_in_column(COLUMN *col, int val);
 
+
+/* Display menu 1
+ * (without column created)
+ */
+int display_menu_1();
+
+
+/* Display menu 2
+ * (with column created)
+ */
+int display_menu_2();
+
+
 #endif //PROJET_CDATAFRAME_FEATURES_H

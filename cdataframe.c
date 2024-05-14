@@ -179,6 +179,17 @@ void print_lines(CDATAFRAME *cdt, int x, int y){
     return row;
 }
 
+void print_partial_col(COLUMN* col, size_t start, size_t end)
+{
+    if (col != NULL && col->data != NULL && start < col->T_logique && end <= col->T_logique) {
+        printf("Contenu partiel de la colonne:\n");
+        for (size_t i = start; i < end; ++i) {
+            printf("[%zu] %d\n", i, col->data[i]);
+        }
+    } else {
+        printf("Indices de début ou de fin non valides ou colonne vide.\n");
+    }
+}
     void delete_row(ROW* row) {
     if (row != NULL) {
         if (row->values != NULL) {

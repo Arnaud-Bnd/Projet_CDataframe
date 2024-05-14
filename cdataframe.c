@@ -157,6 +157,38 @@ void print_lines(CDATAFRAME *cdt, int x, int y){
         return;
     }
 
+    void print_col(COLUMN* col) {
+    if (col != NULL && col->data != NULL) {
+        printf("Contenu colonne:\n");
+        for (size_t i = 0; i < col->T_logique; ++i) {
+            printf("[%zu] %d\n", i, col->data[i]);
+        }
+    } else {
+        printf("La colonne est vide.\n");
+    }
+}
+    ROW* create_row(size_t num_values) {
+    ROW* row = malloc(sizeof(ROW));
+    if (row != NULL) {
+        row->values = malloc(num_values * sizeof(int));
+        if (row->values == NULL) {
+            free(row);
+            return NULL; // Échec de l'allocation mémoire
+        }
+    }
+    return row;
+}
+
+    void delete_row(ROW* row) {
+    if (row != NULL) {
+        if (row->values != NULL) {
+            free(row->values);
+        }
+        free(row);
+    }
+}
+
+    
     /* Boucle pour les titres des colonnes */
     for (int i = 0 ; i < cdt->num_columns ; i++) {
         // Afficher le titre de la colonne
@@ -206,6 +238,22 @@ int insert_column(CDATAFRAME* cdt, COLUMN* column) {
             return 0;
         }
     }
+void remove_column_from_dataframe(COLUMN*** dataframe, size_t index) {
+    if (dataframe != NULL && *dataframe != NULL && index < (*dataframe)[0]->T_logique) {
+        delete_column(&((*dataframe)[index + 1])); // Suppression de la colonne
+        // Déplacement des pointeurs pour remplir le trou laissé par la suppression de la colonne
+        for (size_t i = index; i < (*dataframe)[0]->T_logique - 1; ++i) {
+            (*dataframe)[i + 1] = (*dataframe)[i + 2];
+        }
+        (*dataframe)[0]->T_logique--; // Décrémentation de la taille logique du CDataframe
+    }
+}
+void rename_column(COLUMN* col, char* new_title) {
+    if (col != NULL && new_title != NULL) {
+        col->title = *new_title;
+    }
+}
+
 
     /* Sinon faire une réallocation (toujours à la bonne taille) */
     else {

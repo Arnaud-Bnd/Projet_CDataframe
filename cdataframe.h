@@ -15,6 +15,10 @@ typedef struct {
     COLUMN **column;
 } CDATAFRAME;
 
+typedef struct {
+    int* values;
+} ROW;
+
 
 /* Create a CDataframe
  * @param1 : CDataframe title

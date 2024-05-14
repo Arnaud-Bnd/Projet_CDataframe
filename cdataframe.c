@@ -238,14 +238,24 @@ int insert_column(CDATAFRAME* cdt, COLUMN* column) {
             return 0;
         }
     }
-void remove_column_from_dataframe(COLUMN*** dataframe, size_t index) {
-    if (dataframe != NULL && *dataframe != NULL && index < (*dataframe)[0]->T_logique) {
-        delete_column(&((*dataframe)[index + 1])); // Suppression de la colonne
-        // Déplacement des pointeurs pour remplir le trou laissé par la suppression de la colonne
-        for (size_t i = index; i < (*dataframe)[0]->T_logique - 1; ++i) {
-            (*dataframe)[i + 1] = (*dataframe)[i + 2];
+void delete_column(COLUMN* column) {
+    if (column != NULL) {
+        // Libérer la mémoire allouée pour le titre de la colonne
+        free(column->title);
+        
+        // Libérer la mémoire allouée pour chaque ligne de la colonne
+        for (int i = 0; i < column->T_logique; ++i) {
+            free(column->data[i]);
         }
-        (*dataframe)[0]->T_logique--; // Décrémentation de la taille logique du CDataframe
+        
+        // Libérer le tableau de pointeurs vers les lignes
+        free(column->data);
+        
+        // Réinitialiser la taille logique de la colonne
+        column->T_logique = 0;
+        
+        // Réinitialiser la taille physique de la colonne
+        column->T_physique = 0;
     }
 }
 void rename_column(COLUMN* col, char* new_title) {

@@ -20,6 +20,11 @@ typedef struct {
 } ROW;
 
 
+typedef struct {
+    int* values;
+} ROW;
+
+
 /* Create a CDataframe
  * @param1 : CDataframe title
  * @return : Pointer to created column

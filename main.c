@@ -6,8 +6,8 @@
 
 int main() {
     /* Création d'un CDataFrame */
-    CDATAFRAME *cdt = create_cdataframe("CDataFrame");
-    //CDATAFRAME *cdt = hard_filling();
+    // CDATAFRAME *cdt = create_cdataframe("CDataFrame");
+    CDATAFRAME *cdt = hard_filling();
 
     /* Création du pointeur colonne */
     COLUMN *col = NULL;
@@ -65,6 +65,124 @@ int main() {
                     break;
                 }
 
+                case 5 : { /* Afficher une partie des colonnes du CDataframe */
+                    int x = -1, y = -1;
+
+                    char name_x[20];
+                    printf("Donner le nom de la colonne de départ : ");
+                    scanf("%s", name_x);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    for (int i = 0; i < cdt->num_columns ; i++) {
+                        if (strcmp(cdt->column[i]->title, name_x) == 0) {
+                            x = i;
+                            break;
+                        }
+                    }
+                    if (x == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    char name_y[20];
+                    printf("Donner le nom de la colonne de fin : ");
+                    scanf("%s", name_y);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    for (int i = x ; i < cdt->num_columns ; i++) {
+                        if (strcmp(cdt->column[i]->title, name_y) == 0) {
+                            y = i;
+                            break;
+                        }
+                    }
+                    if (y == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    print_col_of_cdt(cdt, x, y);
+                    break;
+                }
+
+                case 6 : { /* Ajouter une ligne de valeurs au CDataFrame */
+                    insert_line(cdt);
+                    break;
+                }
+
+                case 7 : { /* Supprimer une ligne de valeurs du CDataFrame */
+                    int index;
+
+                    printf("Quelle ligne souhaitez-vous supprimer (1 à %d) ? ", number_of_lines(cdt));
+                    do {
+                        scanf("%d", &index);
+                    } while (index < 1 || index > number_of_lines(cdt));
+
+                    delete_line(cdt, index - 1);
+                    break;
+                }
+
+                case 8 : { /* Supprimer une colonne du CDataFrame */
+                    char name[20];
+                    printf("Donner le nom de la colonne que vous souhaitez supprimer : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    delete_col(cdt, index);
+                    break;
+                }
+
+                case 9 : { /* Renommer le titre d'une colonne du CDataFrame */
+                    char name[20];
+                    printf("Donner le nom de la colonne dont vous souhaitez modifier le nom : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    char new_name[20];
+                    printf("Quelle nom voulez-vous donner à la colonne ? ");
+                    scanf("%s", new_name);
+                    printf("\n");
+
+                    printf("\t%d\n", rename_col(cdt, index, new_name));
+                    break;
+                }
+
+                case 10 : { /* Chercher une valeur dans le CDataFrame */
+                    int val;
+
+                    printf("Quelle valeurs cherchez-vous dans le CDataframe ? ");
+                    scanf("%d", &val);
+
+                    printf("La valeur apparait %d fois dans le CDataframe.\n", search_value(cdt, val));
+                    break;
+                }
 
                 case 11 : { /* Remplacer une cellule du CDataFrame */
                     int x;
@@ -81,7 +199,7 @@ int main() {
                     scanf("%s", name);
                     printf("\n");
 
-
+                    /* Déterminer l'index de la colonne */
                     int y = -1;
                     for (int i = 0; i < cdt->num_columns; i++) {
                         if (strcmp(cdt->column[i]->title, name) == 0) {
@@ -105,6 +223,38 @@ int main() {
                     break;
                 }
 
+                case 12 : { /* Accéder à la valeur d'une cellule du CDataFrame */
+                    int x;
+                    printf("Donner le numéro de la ligne de la cellule que vous souhaitez accéder (de 1 à %d) : ",
+                           number_of_lines(cdt));
+                    do {
+                        scanf("%d", &x);
+                    } while (x < 1 || x > number_of_lines(cdt));
+                    printf("\n");
+
+
+                    char name[20];
+                    printf("Donner le nom de la colonne de la cellule que vous souhaitez accéder : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+
+                    int y = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            y = i;
+                            break;
+                        }
+                    }
+                    if (y == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    printf("La valeur à la colonne '%s' et à la ligne %d est : %d.\n", cdt->column[y]->title, x,
+                           select_cell(cdt, x - 1, y));
+                    break;
+                }
 
                 case 13 : { /* Afficher le nom des colonnes du CDataFrame */
                     printf("\n");
@@ -158,6 +308,7 @@ int main() {
                     scanf("%s", name);
                     printf("\n");
 
+                    /* Déterminer l'index de la colonne */
                     int index = -1;
                     for (int i = 0; i < cdt->num_columns; i++) {
                         if (strcmp(cdt->column[i]->title, name) == 0) {
@@ -175,7 +326,7 @@ int main() {
                     printf("Vous souhaitez trier la colonne dans l'ordre croissant (0) ou décroissant (1) : ");
                     scanf("%d", &sort_order);
 
-                    cdt->column[index]->valid_index = -1; /////////////////////////////////////////
+                    cdt->column[index]->valid_index = -1; /////////////////////////////////////////////////////////////////////////////////
                     if (sort_order == ASC)
                         sort(cdt->column[index], ASC);
                     else if (sort_order == DESC)
@@ -192,6 +343,7 @@ int main() {
                     scanf("%s", name);
                     printf("\n");
 
+                    /* Déterminer l'index de la colonne */
                     int index = -1;
                     for (int i = 0; i < cdt->num_columns; i++) {
                         if (strcmp(cdt->column[i]->title, name) == 0) {
@@ -214,6 +366,7 @@ int main() {
                     scanf("%s", name);
                     printf("\n");
 
+                    /* Déterminer l'index de la colonne */
                     int index = -1;
                     for (int i = 0; i < cdt->num_columns; i++) {
                         if (strcmp(cdt->column[i]->title, name) == 0) {
@@ -236,6 +389,7 @@ int main() {
                     scanf("%s", name);
                     printf("\n");
 
+                    /* Déterminer l'index de la colonne */
                     int index = -1;
                     for (int i = 0; i < cdt->num_columns; i++) {
                         if (strcmp(cdt->column[i]->title, name) == 0) {
@@ -264,6 +418,7 @@ int main() {
                     scanf("%s", name);
                     printf("\n");
 
+                    /* Déterminer l'index de la colonne */
                     int index = -1;
                     for (int i = 0; i < cdt->num_columns; i++) {
                         if (strcmp(cdt->column[i]->title, name) == 0) {
@@ -276,7 +431,7 @@ int main() {
                         break;
                     }
 
-                    cdt->column[index]->valid_index = -1; /////////////////////////////////////////
+                    cdt->column[index]->valid_index = -1; //////////////////////////////////////////////////////////////////////////
                     update_index(cdt->column[index]);
                     break;
                 }
@@ -287,6 +442,7 @@ int main() {
                     scanf("%s", name);
                     printf("\n");
 
+                    /* Déterminer l'index de la colonne */
                     int index = -1;
                     for (int i = 0; i < cdt->num_columns; i++) {
                         if (strcmp(cdt->column[i]->title, name) == 0) {
@@ -376,11 +532,127 @@ int main() {
                     break;
                 }
 
+                case 7 : { /* Afficher une partie des colonnes du CDataframe */
+                    int x = -1, y = -1;
 
+                    char name_x[20];
+                    printf("Donner le nom de la colonne de départ : ");
+                    scanf("%s", name_x);
+                    printf("\n");
 
+                    for (int i = 0; i < cdt->num_columns ; i++) {
+                        if (strcmp(cdt->column[i]->title, name_x) == 0) {
+                            x = i;
+                            break;
+                        }
+                    }
+                    if (x == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
 
+                    char name_y[20];
+                    printf("Donner le nom de la colonne de fin : ");
+                    scanf("%s", name_y);
+                    printf("\n");
 
+                    for (int i = x ; i < cdt->num_columns ; i++) {
+                        if (strcmp(cdt->column[i]->title, name_y) == 0) {
+                            y = i;
+                            break;
+                        }
+                    }
+                    if (y == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
 
+                    print_col_of_cdt(cdt, x, y);
+                    break;
+                }
+
+                case 8 : { /* Ajouter une ligne de valeurs au CDataFrame */
+                    insert_line(cdt);
+                    break;
+                }
+
+                case 9 : { /* Supprimer une ligne de valeurs du CDataFrame */
+                    int index;
+
+                    printf("Quelle ligne souhaitez-vous supprimer (1 à %d) ? ", number_of_lines(cdt));
+                    do {
+                        scanf("%d", &index);
+                    } while (index < 1 || index > number_of_lines(cdt));
+
+                    delete_line(cdt, index - 1);
+                    break;
+                }
+
+                case 10 : { /* Ajouter une colonne au CDataFrame */
+                    insert_column(cdt, col);
+                    break;
+                }
+
+                case 11 : { /* Supprimer une colonne du CDataFrame */
+                    char name[20];
+                    printf("Donner le nom de la colonne que vous souhaitez supprimer : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    delete_col(cdt, index);
+                    break;
+                }
+
+                case 12 : { /* Renommer le titre d'une colonne du CDataFrame */
+                    char name[20];
+                    printf("Donner le nom de la colonne dont vous souhaitez modifier le nom : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    char new_name[20];
+                    printf("Quelle nom voulez-vous donner à la colonne ? ");
+                    scanf("%s", new_name);
+                    printf("\n");
+
+                    printf("\t%d\n", rename_col(cdt, index, new_name));
+                    break;
+                }
+
+                case 13 : { /* Chercher une valeur dans le CDataFrame */
+                    int val;
+
+                    printf("Quelle valeurs cherchez-vous dans le CDataframe ? ");
+                    scanf("%d", &val);
+
+                    printf("La valeur apparait %d fois dans le CDataframe.\n", search_value(cdt, val));
+                    break;
+                }
 
                 case 14 : { /* Remplacer une cellule du CDataFrame */
                     int x;
@@ -421,13 +693,38 @@ int main() {
                     break;
                 }
 
+                case 15 : { /* Accéder à la valeur d'une cellule du CDataFrame */
+                    int x;
+                    printf("Donner le numéro de la ligne de la cellule que vous souhaitez accéder (de 1 à %d) : ",
+                           number_of_lines(cdt));
+                    do {
+                        scanf("%d", &x);
+                    } while (x < 1 || x > number_of_lines(cdt));
+                    printf("\n");
 
 
+                    char name[20];
+                    printf("Donner le nom de la colonne de la cellule que vous souhaitez accéder : ");
+                    scanf("%s", name);
+                    printf("\n");
 
 
+                    int y = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            y = i;
+                            break;
+                        }
+                    }
+                    if (y == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
 
-
-
+                    printf("La valeur à la colonne '%s' et à la ligne %d est : %d.\n", cdt->column[y]->title, x,
+                           select_cell(cdt, x - 1, y));
+                    break;
+                }
 
                 case 16 : { /* Afficher le nom des colonnes du CDataFrame */
                     printf("\n");
@@ -498,7 +795,7 @@ int main() {
                     printf("Vous souhaitez trier la colonne dans l'ordre croissant (0) ou décroissant (1) : ");
                     scanf("%d", &sort_order);
 
-                    cdt->column[index]->valid_index = -1; /////////////////////////////////////////
+                    cdt->column[index]->valid_index = -1; ////////////////////////////////////////////////////////////////////////////////////
                     if (sort_order == ASC)
                         sort(cdt->column[index], ASC);
                     else if (sort_order == DESC)
@@ -599,7 +896,7 @@ int main() {
                         break;
                     }
 
-                    cdt->column[index]->valid_index = -1; /////////////////////////////////////////
+                    cdt->column[index]->valid_index = -1; ///////////////////////////////////////////////////////////////////////////////////////////
                     update_index(cdt->column[index]);
                     break;
                 }

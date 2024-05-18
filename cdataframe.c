@@ -157,49 +157,6 @@ void print_lines(CDATAFRAME *cdt, int x, int y){
         return;
     }
 
-    void print_col(COLUMN* col) {
-    if (col != NULL && col->data != NULL) {
-        printf("Contenu colonne:\n");
-        for (size_t i = 0; i < col->T_logique; ++i) {
-            printf("[%zu] %d\n", i, col->data[i]);
-        }
-    } else {
-        printf("La colonne est vide.\n");
-    }
-}
-    ROW* create_row(size_t num_values) {
-    ROW* row = malloc(sizeof(ROW));
-    if (row != NULL) {
-        row->values = malloc(num_values * sizeof(int));
-        if (row->values == NULL) {
-            free(row);
-            return NULL; // Échec de l'allocation mémoire
-        }
-    }
-    return row;
-}
-
-void print_partial_col(COLUMN* col, size_t start, size_t end)
-{
-    if (col != NULL && col->data != NULL && start < col->T_logique && end <= col->T_logique) {
-        printf("Contenu partiel de la colonne:\n");
-        for (size_t i = start; i < end; ++i) {
-            printf("[%zu] %d\n", i, col->data[i]);
-        }
-    } else {
-        printf("Indices de début ou de fin non valides ou colonne vide.\n");
-    }
-}
-    void delete_row(ROW* row) {
-    if (row != NULL) {
-        if (row->values != NULL) {
-            free(row->values);
-        }
-        free(row);
-    }
-}
-
-    
     /* Boucle pour les titres des colonnes */
     for (int i = 0 ; i < cdt->num_columns ; i++) {
         // Afficher le titre de la colonne
@@ -256,7 +213,7 @@ void print_col_of_cdt(CDATAFRAME* cdt, int x, int y) {
 }
 
 
-int insert_line(CDATAFRAME* cdt) {
+void insert_line(CDATAFRAME* cdt) {
     for (int i = 0 ; i < cdt->num_columns ; i++){
         int val;
 
@@ -266,6 +223,7 @@ int insert_line(CDATAFRAME* cdt) {
         insert_value(cdt->column[i], val);
     }
 }
+
 
 int delete_line(CDATAFRAME* cdt, int index) {
     /* Vérification de la taille du CDataframe et de la colonne*/
@@ -289,29 +247,6 @@ int delete_line(CDATAFRAME* cdt, int index) {
 }
 
 
-void delete_row(ROW* row) {
-    if (row != NULL) {
-        if (row->values != NULL) {
-            free(row->values);
-        }
-        free(row);
-    }
-}
-
-
-ROW* create_row(size_t num_values) {
-    ROW* row = malloc(sizeof(ROW));
-    if (row != NULL) {
-        row->values = malloc(num_values * sizeof(int));
-        if (row->values == NULL) {
-            free(row);
-            return NULL; // Échec de l'allocation mémoire
-        }
-    }
-    return row;
-}
-
-
 int insert_column(CDATAFRAME* cdt, COLUMN* column) {
     /* Vérification de la taille du CDataframe et de la colonne */
     if (cdt == NULL || column == NULL) {
@@ -327,32 +262,6 @@ int insert_column(CDATAFRAME* cdt, COLUMN* column) {
             return 0;
         }
     }
-void delete_column(COLUMN* column) {
-    if (column != NULL) {
-        // Libérer la mémoire allouée pour le titre de la colonne
-        free(column->title);
-        
-        // Libérer la mémoire allouée pour chaque ligne de la colonne
-        for (int i = 0; i < column->T_logique; ++i) {
-            free(column->data[i]);
-        }
-        
-        // Libérer le tableau de pointeurs vers les lignes
-        free(column->data);
-        
-        // Réinitialiser la taille logique de la colonne
-        column->T_logique = 0;
-        
-        // Réinitialiser la taille physique de la colonne
-        column->T_physique = 0;
-    }
-}
-void rename_column(COLUMN* col, char* new_title) {
-    if (col != NULL && new_title != NULL) {
-        col->title = *new_title;
-    }
-}
-
 
     /* Sinon faire une réallocation (toujours à la bonne taille) */
     else {
@@ -433,10 +342,7 @@ int search_value(CDATAFRAME* cdt, int value) {
     /* Boucle pour parcourir les colonnes */
     for (int i = 0 ; i < cdt->num_columns ; i++) {
         /* Boucle pour parcourir les lignes */
-        for (int j = 0 ; j < number_of_lines(cdt) ; j++) {
-            if (cdt->column[i]->data[j] == value)
-                cpt++;
-        }
+        cpt += number_occ(cdt->column[i], value);
     }
 
     return cpt;

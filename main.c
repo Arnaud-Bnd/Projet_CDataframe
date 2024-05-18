@@ -5,6 +5,18 @@
 #include "features.h"
 
 int main() {
+    CDATAFRAME *cdt = hard_filling();
+
+    cdt->column[1]->valid_index = -1;
+    sort(cdt->column[1], DESC);
+    for (int i = 0 ; i < cdt->column[1]->T_Logique ; i++) {
+        printf("[%llu] : %d\n", cdt->column[1]->index[i], cdt->column[1]->data[i]);
+    }
+    return 0;
+}
+
+
+int main1() {
     /* Création d'un CDataFrame */
     // CDATAFRAME *cdt = create_cdataframe("CDataFrame");
     CDATAFRAME *cdt = hard_filling();
@@ -50,13 +62,13 @@ int main() {
                     int x, y;
 
                     do {
-                        printf("Donner le numéro de la ligne de départ (de 1 à %d) : ", number_of_lines(cdt));
+                        printf("Donnez le numéro de la ligne de départ (de 1 à %d) : ", number_of_lines(cdt));
                         scanf("%d", &x);
                     } while (x < 1 || x > number_of_lines(cdt));
                     printf("\n");
 
                     do {
-                        printf("Donner le numéro de la ligne de fin (de %d à %d) : ", x, number_of_lines(cdt));
+                        printf("Donnez le numéro de la ligne de fin (de %d à %d) : ", x, number_of_lines(cdt));
                         scanf("%d", &y);
                     } while (y < x || y > number_of_lines(cdt));
                     printf("\n");
@@ -69,7 +81,7 @@ int main() {
                     int x = -1, y = -1;
 
                     char name_x[20];
-                    printf("Donner le nom de la colonne de départ : ");
+                    printf("Donnez le nom de la colonne de départ : ");
                     scanf("%s", name_x);
                     printf("\n");
 
@@ -86,7 +98,7 @@ int main() {
                     }
 
                     char name_y[20];
-                    printf("Donner le nom de la colonne de fin : ");
+                    printf("Donnez le nom de la colonne de fin : ");
                     scanf("%s", name_y);
                     printf("\n");
 
@@ -125,7 +137,7 @@ int main() {
 
                 case 8 : { /* Supprimer une colonne du CDataFrame */
                     char name[20];
-                    printf("Donner le nom de la colonne que vous souhaitez supprimer : ");
+                    printf("Donnez le nom de la colonne que vous souhaitez supprimer : ");
                     scanf("%s", name);
                     printf("\n");
 
@@ -148,7 +160,7 @@ int main() {
 
                 case 9 : { /* Renommer le titre d'une colonne du CDataFrame */
                     char name[20];
-                    printf("Donner le nom de la colonne dont vous souhaitez modifier le nom : ");
+                    printf("Donnez le nom de la colonne dont vous souhaitez modifier le nom : ");
                     scanf("%s", name);
                     printf("\n");
 
@@ -186,7 +198,7 @@ int main() {
 
                 case 11 : { /* Remplacer une cellule du CDataFrame */
                     int x;
-                    printf("Donner le numéro de la ligne de la cellule que vous souhaitez modifier (de 1 à %d) : ",
+                    printf("Donnez le numéro de la ligne de la cellule que vous souhaitez modifier (de 1 à %d) : ",
                            number_of_lines(cdt));
                     do {
                         scanf("%d", &x);
@@ -195,7 +207,7 @@ int main() {
 
 
                     char name[20];
-                    printf("Donner le nom de la colonne de la cellule que vous souhaitez modifier : ");
+                    printf("Donnez le nom de la colonne de la cellule que vous souhaitez modifier : ");
                     scanf("%s", name);
                     printf("\n");
 
@@ -225,7 +237,7 @@ int main() {
 
                 case 12 : { /* Accéder à la valeur d'une cellule du CDataFrame */
                     int x;
-                    printf("Donner le numéro de la ligne de la cellule que vous souhaitez accéder (de 1 à %d) : ",
+                    printf("Donnez le numéro de la ligne de la cellule que vous souhaitez accéder (de 1 à %d) : ",
                            number_of_lines(cdt));
                     do {
                         scanf("%d", &x);
@@ -234,7 +246,7 @@ int main() {
 
 
                     char name[20];
-                    printf("Donner le nom de la colonne de la cellule que vous souhaitez accéder : ");
+                    printf("Donnez le nom de la colonne de la cellule que vous souhaitez accéder : ");
                     scanf("%s", name);
                     printf("\n");
 
@@ -272,7 +284,91 @@ int main() {
                     break;
                 }
 
-                case 16 : { /* Nombre de cellules égale à une valeur x */
+                case 16 : { /* Nombre de cellules égale à une valeur x dans une colonne */
+                    char name[20];
+                    printf("Donnez le nom de la colonne qui vous intéresse : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    int x;
+                    printf("Saisir la valeur x : ");
+                    scanf("%d", &x);
+                    printf("\n");
+
+                    printf("Le nombre de cellules égale à %d dans '%s' est : %d\n\n", x, cdt->column[index]->title, equal_to(cdt->column[index], x));
+                    break;
+                }
+
+                case 17 : { /* Nombre de cellules plus grandes qu'une valeur x dans une colonne */
+                    char name[20];
+                    printf("Donnez le nom de la colonne qui vous intéresse : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    int x;
+                    printf("Saisir la valeur x : ");
+                    scanf("%d", &x);
+                    printf("\n");
+
+                    printf("Le nombre de cellules plus grandes que %d dans '%s' est : %d\n\n", x, cdt->column[index]->title, greater_than(cdt->column[index], x));
+                    break;
+                }
+
+                case 18 : { /* Nombre de cellules plus petites qu'une valeur x dans une colonne */
+                    char name[20];
+                    printf("Donnez le nom de la colonne qui vous intéresse : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    int x;
+                    printf("Saisir la valeur x : ");
+                    scanf("%d", &x);
+                    printf("\n");
+
+                    printf("Le nombre de cellules plus petite que %d dans '%s' est : %d\n\n", x, cdt->column[index]->title, less_than(cdt->column[index], x));
+                    break;
+                }
+
+                case 19 : { /* Nombre de cellules égale à une valeur x */
                     int x;
                     printf("Saisir la valeur x : ");
                     scanf("%d", &x);
@@ -282,7 +378,7 @@ int main() {
                     break;
                 }
 
-                case 17 : { /* Nombre de cellules plus grandes qu'une valeur x */
+                case 20 : { /* Nombre de cellules plus grandes qu'une valeur x */
                     int x;
                     printf("Saisir la valeur x : ");
                     scanf("%d", &x);
@@ -292,7 +388,7 @@ int main() {
                     break;
                 }
 
-                case 18 : { /* Nombre de cellules plus petites qu'une valeur x */
+                case 21 : { /* Nombre de cellules plus petites qu'une valeur x */
                     int x;
                     printf("Saisir la valeur x : ");
                     scanf("%d", &x);
@@ -302,9 +398,9 @@ int main() {
                     break;
                 }
 
-                case 19 : { /* Trier une colonne */
+                case 22 : { /* Trier une colonne */
                     char name[20];
-                    printf("Donner le nom de la colonne de la cellule que vous souhaitez trier : ");
+                    printf("Donnez le nom de la colonne que vous souhaitez trier : ");
                     scanf("%s", name);
                     printf("\n");
 
@@ -337,7 +433,7 @@ int main() {
                     break;
                 }
 
-                case 20 : { /* Afficher le contenu d'une colonne triée */
+                case 23 : { /* Afficher le contenu d'une colonne triée */
                     char name[20];
                     printf("Quelle colonne triée souhaitez-vous afficher ? ");
                     scanf("%s", name);
@@ -360,7 +456,7 @@ int main() {
                     break;
                 }
 
-                case 21 : { /* Effacer l'index d'une colonne */
+                case 24 : { /* Effacer l'index d'une colonne */
                     char name[20];
                     printf("De quelle colonne triée souhaitez-vous supprimer l'index ? ");
                     scanf("%s", name);
@@ -383,7 +479,7 @@ int main() {
                     break;
                 }
 
-                case 22 : { /* Vérifier si une colonne possède un index */
+                case 25 : { /* Vérifier si une colonne possède un index */
                     char name[20];
                     printf("De quelle colonne souhaitez-vous vérifier l'existence d'un index ? ");
                     scanf("%s", name);
@@ -412,7 +508,7 @@ int main() {
                     break;
                 }
 
-                case 23 : { /* Mettre à jour un index */
+                case 26 : { /* Mettre à jour un index */
                     char name[20];
                     printf("De quelle colonne souhaitez-vous mettre à jour l'index ? ");
                     scanf("%s", name);
@@ -436,7 +532,7 @@ int main() {
                     break;
                 }
 
-                case 24 : { /* Faire une recherche dichotomique */
+                case 27 : { /* Faire une recherche dichotomique */
                     char name[20];
                     printf("Dans quelle colonne triée cherchez-vous la valeur ? ");
                     scanf("%s", name);
@@ -460,11 +556,16 @@ int main() {
                     scanf("%d", &val);
                     printf("\n");
 
-                    search_value_in_column(cdt->column[index], val);
+                    if (search_value_in_column(cdt->column[index], val) == -2)
+                        break;
+                    else if (search_value_in_column(cdt->column[index], val) == -1)
+                        printf("La valeur ne se trouve pas dans la colonne.\n");
+                    else
+                        printf("La valeur se trouve à la ligne %d.\n", search_value_in_column(cdt->column[index], val) + 1);
                     break;
                 }
 
-                case 25 : { /* Ne rien faire */
+                case 28 : { /* Ne rien faire */
                     /* Arrêter le programme */
                     return 0;
                 }
@@ -517,13 +618,13 @@ int main() {
                     int x, y;
 
                     do {
-                        printf("Donner le numéro de la ligne de départ (de 1 à %d) : ", number_of_lines(cdt));
+                        printf("Donnez le numéro de la ligne de départ (de 1 à %d) : ", number_of_lines(cdt));
                         scanf("%d", &x);
                     } while (x < 1 || x > number_of_lines(cdt));
                     printf("\n");
 
                     do {
-                        printf("Donner le numéro de la ligne de fin (de %d à %d) : ", x, number_of_lines(cdt));
+                        printf("Donnez le numéro de la ligne de fin (de %d à %d) : ", x, number_of_lines(cdt));
                         scanf("%d", &y);
                     } while (y < x || y > number_of_lines(cdt));
                     printf("\n");
@@ -536,7 +637,7 @@ int main() {
                     int x = -1, y = -1;
 
                     char name_x[20];
-                    printf("Donner le nom de la colonne de départ : ");
+                    printf("Donnez le nom de la colonne de départ : ");
                     scanf("%s", name_x);
                     printf("\n");
 
@@ -552,7 +653,7 @@ int main() {
                     }
 
                     char name_y[20];
-                    printf("Donner le nom de la colonne de fin : ");
+                    printf("Donnez le nom de la colonne de fin : ");
                     scanf("%s", name_y);
                     printf("\n");
 
@@ -595,7 +696,7 @@ int main() {
 
                 case 11 : { /* Supprimer une colonne du CDataFrame */
                     char name[20];
-                    printf("Donner le nom de la colonne que vous souhaitez supprimer : ");
+                    printf("Donnez le nom de la colonne que vous souhaitez supprimer : ");
                     scanf("%s", name);
                     printf("\n");
 
@@ -618,7 +719,7 @@ int main() {
 
                 case 12 : { /* Renommer le titre d'une colonne du CDataFrame */
                     char name[20];
-                    printf("Donner le nom de la colonne dont vous souhaitez modifier le nom : ");
+                    printf("Donnez le nom de la colonne dont vous souhaitez modifier le nom : ");
                     scanf("%s", name);
                     printf("\n");
 
@@ -656,7 +757,7 @@ int main() {
 
                 case 14 : { /* Remplacer une cellule du CDataFrame */
                     int x;
-                    printf("Donner le numéro de la ligne de la cellule que vous souhaitez modifier (de 1 à %d) : ",
+                    printf("Donnez le numéro de la ligne de la cellule que vous souhaitez modifier (de 1 à %d) : ",
                            number_of_lines(cdt));
                     do {
                         scanf("%d", &x);
@@ -665,7 +766,7 @@ int main() {
 
 
                     char name[20];
-                    printf("Donner le nom de la colonne de la cellule que vous souhaitez modifier : ");
+                    printf("Donnez le nom de la colonne de la cellule que vous souhaitez modifier : ");
                     scanf("%s", name);
                     printf("\n");
 
@@ -695,7 +796,7 @@ int main() {
 
                 case 15 : { /* Accéder à la valeur d'une cellule du CDataFrame */
                     int x;
-                    printf("Donner le numéro de la ligne de la cellule que vous souhaitez accéder (de 1 à %d) : ",
+                    printf("Donnez le numéro de la ligne de la cellule que vous souhaitez accéder (de 1 à %d) : ",
                            number_of_lines(cdt));
                     do {
                         scanf("%d", &x);
@@ -704,7 +805,7 @@ int main() {
 
 
                     char name[20];
-                    printf("Donner le nom de la colonne de la cellule que vous souhaitez accéder : ");
+                    printf("Donnez le nom de la colonne de la cellule que vous souhaitez accéder : ");
                     scanf("%s", name);
                     printf("\n");
 
@@ -742,7 +843,91 @@ int main() {
                     break;
                 }
 
-                case 19 : { /* Nombre de cellules égale à une valeur x */
+                case 19 : { /* Nombre de cellules égale à une valeur x dans une colonne */
+                    char name[20];
+                    printf("Donnez le nom de la colonne qui vous intéresse : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    int x;
+                    printf("Saisir la valeur x : ");
+                    scanf("%d", &x);
+                    printf("\n");
+
+                    printf("Le nombre de cellules égale à %d est : %d\n\n", x, equal_to(cdt->column[index], x));
+                    break;
+                }
+
+                case 20 : { /* Nombre de cellules plus grandes qu'une valeur x dans une colonne */
+                    char name[20];
+                    printf("Donnez le nom de la colonne qui vous intéresse : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    int x;
+                    printf("Saisir la valeur x : ");
+                    scanf("%d", &x);
+                    printf("\n");
+
+                    printf("Le nombre de cellules égale à %d est : %d\n\n", x, greater_than(cdt->column[index], x));
+                    break;
+                }
+
+                case 21 : { /* Nombre de cellules plus petites qu'une valeur x dans une colonne */
+                    char name[20];
+                    printf("Donnez le nom de la colonne qui vous intéresse : ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    int x;
+                    printf("Saisir la valeur x : ");
+                    scanf("%d", &x);
+                    printf("\n");
+
+                    printf("Le nombre de cellules égale à %d est : %d\n\n", x, less_than(cdt->column[index], x));
+                    break;
+                }
+
+                case 22 : { /* Nombre de cellules égale à une valeur x */
                     int x;
                     printf("Saisir la valeur x : ");
                     scanf("%d", &x);
@@ -752,7 +937,7 @@ int main() {
                     break;
                 }
 
-                case 20 : { /* Nombre de cellules plus grandes qu'une valeur x */
+                case 23 : { /* Nombre de cellules plus grandes qu'une valeur x */
                     int x;
                     printf("Saisir la valeur x : ");
                     scanf("%d", &x);
@@ -762,7 +947,7 @@ int main() {
                     break;
                 }
 
-                case 21 : { /* Nombre de cellules plus petites qu'une valeur x */
+                case 24 : { /* Nombre de cellules plus petites qu'une valeur x */
                     int x;
                     printf("Saisir la valeur x : ");
                     scanf("%d", &x);
@@ -772,9 +957,9 @@ int main() {
                     break;
                 }
 
-                case 22 : { /* Trier une colonne */
+                case 25 : { /* Trier une colonne */
                     char name[20];
-                    printf("Donner le nom de la colonne de la cellule que vous souhaitez trier : ");
+                    printf("Donnez le nom de la colonne de la cellule que vous souhaitez trier : ");
                     scanf("%s", name);
                     printf("\n");
 
@@ -806,7 +991,7 @@ int main() {
                     break;
                 }
 
-                case 23 : { /* Afficher le contenu d'une colonne triée */
+                case 26 : { /* Afficher le contenu d'une colonne triée */
                     char name[20];
                     printf("Quelle colonne triée souhaitez-vous afficher ? ");
                     scanf("%s", name);
@@ -828,7 +1013,7 @@ int main() {
                     break;
                 }
 
-                case 24 : { /* Effacer l'index d'une colonne */
+                case 27 : { /* Effacer l'index d'une colonne */
                     char name[20];
                     printf("De quelle colonne triée souhaitez-vous supprimer l'index ? ");
                     scanf("%s", name);
@@ -850,7 +1035,7 @@ int main() {
                     break;
                 }
 
-                case 25 : { /* Vérifier si une colonne possède un index */
+                case 28 : { /* Vérifier si une colonne possède un index */
                     char name[20];
                     printf("De quelle colonne souhaitez-vous vérifier l'existence d'un index ? ");
                     scanf("%s", name);
@@ -878,7 +1063,7 @@ int main() {
                     break;
                 }
 
-                case 26 : { /* Mettre à jour un index */
+                case 29 : { /* Mettre à jour un index */
                     char name[20];
                     printf("De quelle colonne souhaitez-vous mettre à jour l'index ? ");
                     scanf("%s", name);
@@ -901,7 +1086,7 @@ int main() {
                     break;
                 }
 
-                case 27 : { /* Faire une recherche dichotomique */
+                case 30 : { /* Faire une recherche dichotomique */
                     char name[20];
                     printf("Dans quelle colonne triée cherchez-vous la valeur ? ");
                     scanf("%s", name);
@@ -928,7 +1113,7 @@ int main() {
                     break;
                 }
 
-                case 28 : { /* Ne rien faire */
+                case 31 : { /* Ne rien faire */
                     /* Arrêter le programme */
                     return 0;
                 }
@@ -936,9 +1121,6 @@ int main() {
         }
 
     } while (1);
-
-    print_cdt(cdt);
-    return 0;
 }
 
  

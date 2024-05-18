@@ -15,15 +15,6 @@ typedef struct {
     COLUMN **column;
 } CDATAFRAME;
 
-typedef struct {
-    int* values;
-} ROW;
-
-
-typedef struct {
-    int* values;
-} ROW;
-
 
 /* Create a CDataframe
  * @param1 : CDataframe title
@@ -66,9 +57,8 @@ void print_col_of_cdt(CDATAFRAME* cdt, int x, int y);
 
 /* Insert line in the CDataframe
  * @param1 : Pointer to a CDataframe
- * @return : 1 if the line is added 0 otherwise
  */
-int insert_line(CDATAFRAME* cdt);
+void insert_line(CDATAFRAME* cdt);
 
 
 /* Delete line in the CDataframe

@@ -29,7 +29,7 @@ void sort(COLUMN *col, int sort_dir) {
                 quicksort(col->data, 0, col->T_Logique - 1);
             }
 
-                /* Si la colonne est partiellement triée */
+            /* Si la colonne est partiellement triée */
             else if (col->valid_index == -1) {
                 for (int i = 0; i < col->T_Logique; i++) {
                     int k = col->data[i];
@@ -68,7 +68,6 @@ void sort(COLUMN *col, int sort_dir) {
 
             break;
         }
-
     }
 
 
@@ -158,35 +157,39 @@ int search_value_in_column(COLUMN *col, int val) {
     /* Vérification du tri de la colonne */
     if (col->valid_index == -1 || col->valid_index == 0){
         printf("La colonne n'est pas triée.\n");
-        return -1;
+        return -2;
     }
 
     /* Initialisation des variables */
-    int m, g = 0, d = col->T_Logique - 1, res, arret = 0;
+    int m, g = 0, d = col->T_Logique - 1;
 
-    /* Recherche dichotomique */
-    do {
-        m = (g + d) / 2;
-        if (val == col->data[m]){
-            arret = 1;
-            res = 1;
-        }
-        else {
-            if (val > col->data[m]) {
+    /* Recherche dichotomique par ordre croissant*/
+    if (col->sort_dir == ASC) {
+        while (g <= d) {
+            m = (g + d) / 2;
+            if (val == col->data[m]) {
+                return m;
+            } else if (val > col->data[m]) {
                 g = m + 1;
-            }
-            else {
+            } else {
                 d = m - 1;
             }
-
-            if (g > d) {
-                arret = 1;
-                res = 0;
+        }
+    }
+    /* Recherche dichotomique par ordre décroissant*/
+    else {
+        while (g <= d) {
+            m = (g + d) / 2;
+            if (val == col->data[m]) {
+                return m;
+            } else if (val < col->data[m]) {
+                g = m + 1;
+            } else {
+                d = m - 1;
             }
         }
-    } while (arret != 1);
-
-    return res;
+    }
+    return -1;
 }
 
 
@@ -210,16 +213,19 @@ int display_menu_1() {
            "13 - Afficher le nom des colonnes du CDataFrame\n"
            "14 - Afficher le nombre de lignes du CDataFrame\n"
            "15 - Afficher le nombre de colonnes du CDataFrame\n"
-           "16 - Nombre de cellules égale à une valeur x\n"
-           "17 - Nombre de cellules plus grandes qu'une valeur x\n"
-           "18 - Nombre de cellules plus petites qu'une valeur x\n"
-           "19 - Trier une colonne\n"
-           "20 - Afficher le contenu d'une colonne triée\n"
-           "21 - Effacer l'index d'une colonne\n"
-           "22 - Vérifier si une colonne possède un index\n"
-           "23 - Mettre à jour un index\n"
-           "24 - Faire une recherche dichotomique\n"
-           "25 - Ne rien faire\n");
+           "16 - Nombre de cellules égale à une valeur x dans une colonne\n"
+           "17 - Nombre de cellules plus grandes qu'une valeur x dans une colonne\n"
+           "18 - Nombre de cellules plus petites qu'une valeur x dans une colonne\n"
+           "19 - Nombre de cellules égale à une valeur x dans le CDataFrame\n"
+           "20 - Nombre de cellules plus grandes qu'une valeur x dans le CDataFrame\n"
+           "21 - Nombre de cellules plus petites qu'une valeur x dans le CDataFrame\n"
+           "22 - Trier une colonne\n"
+           "23 - Afficher le contenu d'une colonne triée\n"
+           "24 - Effacer l'index d'une colonne\n"
+           "25 - Vérifier si une colonne possède un index\n"
+           "26 - Mettre à jour un index\n"
+           "27 - Faire une recherche dichotomique\n"
+           "28 - Ne rien faire\n");
     int action;
 
     do {
@@ -244,7 +250,7 @@ int display_menu_2() {
            "6 - Afficher une partie des lignes du CDataFrame\n"
            "7 - Afficher une partie des colonnes du CDataFrame\n"
            "8 - Ajouter une ligne de valeurs au CDataFrame\n"
-           "9!!! - Supprimer une ligne de valeurs du CDataFrame\n"
+           "9 - Supprimer une ligne de valeurs du CDataFrame\n"
            "10 - Ajouter une colonne au CDataFrame\n"
            "11 - Supprimer une colonne du CDataFrame\n"
            "12 - Renommer le titre d'une colonne du CDataFrame\n"
@@ -254,16 +260,19 @@ int display_menu_2() {
            "16 - Afficher le nom des colonnes du CDataFrame\n"
            "17 - Afficher le nombre de lignes du CDataFrame\n"
            "18 - Afficher le nombre de colonnes du CDataFrame\n"
-           "19 - Nombre de cellules égale à une valeur x\n"
-           "20 - Nombre de cellules plus grandes qu'une valeur x\n"
-           "21 - Nombre de cellules plus petites qu'une valeur x\n"
-           "22 - Trier une colonne\n"
-           "23 - Afficher le contenu d'une colonne triée\n"
-           "24 - Effacer l'index d'une colonne\n"
-           "25 - Vérifier si une colonne possède un index\n"
-           "26 - Mettre à jour un index\n"
-           "27 - Faire une recherche dichotomique\n"
-           "28 - Ne rien faire\n");
+           "19 - Nombre de cellules égale à une valeur x dans une colonne\n"
+           "20 - Nombre de cellules plus grandes qu'une valeur x dans une colonne\n"
+           "21 - Nombre de cellules plus petites qu'une valeur x dans une colonne\n"
+           "22 - Nombre de cellules égale à une valeur x dans le CDataFrame\n"
+           "23 - Nombre de cellules plus grandes qu'une valeur x dans le CDataFrame\n"
+           "24 - Nombre de cellules plus petites qu'une valeur x dans le CDataFrame\n"
+           "25 - Trier une colonne\n"
+           "26 - Afficher le contenu d'une colonne triée\n"
+           "27 - Effacer l'index d'une colonne\n"
+           "28 - Vérifier si une colonne possède un index\n"
+           "29 - Mettre à jour un index\n"
+           "30 - Faire une recherche dichotomique\n"
+           "31 - Ne rien faire\n");
     int action;
 
     printf("Que voulez-vous faire ?\n");

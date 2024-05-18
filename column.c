@@ -75,8 +75,8 @@ void delete_column(COLUMN *col) {
     col->title = NULL;
 
     /* Libère la mémoire allouée à la colonne */
-    free(col);
-    col = NULL;
+    //free(col);
+    //col = NULL;
 }
 
 

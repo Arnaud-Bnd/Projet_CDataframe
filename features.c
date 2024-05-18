@@ -5,6 +5,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 
 void sort(COLUMN *col, int sort_dir) {
     /* Vérification de la taille de la colonne */
@@ -54,15 +60,16 @@ void sort(COLUMN *col, int sort_dir) {
 
             /* Si la colonne est partiellement triée */
             else if (col->valid_index == -1) {
-                for (int i = 0; i < col->T_Logique; i++) {
-                    int k = col->data[i];
-                    int j = i;
-                    //printf("%d\n\n", j);
-                    while (j > 0 && col->data[j - 1] < k) {
-                        col->data[j] = col->data[j - 1];
-                        j--;
+                for (int i = 0; i < col->T_Logique - 1; i++) {
+                    int min_idx = i;
+                    for (int j = i + 1; j < col->T_Logique; j++) {
+                        if (col->data[col->index[j]] > col->data[col->index[min_idx]]) {
+                            min_idx = j;
+                        }
                     }
-                    col->data[j] = k;
+                    if (min_idx != i) {
+                        swap(&col->index[i], &col->index[min_idx]);
+                    }
                 }
             }
 
@@ -72,10 +79,12 @@ void sort(COLUMN *col, int sort_dir) {
 
 
     /* Initialiser l'index une fois le tri effectué */
+    /*
     col->index = (unsigned long long *) malloc(col->T_Logique * sizeof (unsigned long long));
     for (int i = 0 ; i < col->T_Logique ; i ++) {
         col->index[i] = i;
     }
+    */
 
     /* Indiquer que la colonne a été triée */
     col->valid_index = 1;
@@ -113,6 +122,59 @@ int partition(int *tab, int left, int right) {
 }
 
 
+void print_sort_cdt(CDATAFRAME *cdt, int index){
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("Le pointeur CDataframe est NULL.\n");
+        return;
+    }
+
+    if (cdt->column[index]->valid_index != 1) {
+        printf("La colonne n'est pas triée.\n");
+        return;
+    }
+
+    /* Afficher le titre du CDataframe */
+    printf("%s\n", cdt->title);
+
+    /* Vérification du nombre de colonnes */
+    if (cdt->num_columns == 0) {
+        printf("Le CDataframe n'a pas de colonnes.\n");
+        return;
+    }
+
+    /* Boucle pour les titres des colonnes */
+    printf("\t\t");
+    for (int i = 0 ; i < cdt->num_columns ; i++) {
+        // Afficher le titre de la colonne
+        printf("%s\t\t", (char *) cdt->column[i]->title);
+    }
+    printf("\n");
+
+    /* Trouver la colonne avec le plus de lignes */
+    int max_rows = number_of_lines(cdt);
+
+    /* Boucle pour les valeurs des colonnes */
+    for (int j = 0 ; j < max_rows ; j++){   // Variation de la ligne
+        /* Afficher le numéro de la ligne */
+        printf("[%d]\t\t", j + 1);
+
+        /* Afficher les valeurs */
+        for (int i = 0 ; i < cdt->num_columns ; i++) {    // Variation de la colonne
+            for (int k = 0 ; i < cdt->num_columns ; k++) {    // Variation de l'index
+                if (j == cdt->column[index]->index[k]) {
+                    // Afficher la valeur
+                    printf("%d\t\t\t\t", cdt->column[i]->data[k]);
+                    break;
+                }
+            }
+        }
+        printf("\n"); // Passage à la ligne suivante
+    }
+    printf("\n");
+}
+
+
 void print_col_by_index(COLUMN *col) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
@@ -127,7 +189,11 @@ void print_col_by_index(COLUMN *col) {
 
     /* Afficher les données de la colonne triée */
     for (int i = 0 ; i < col->T_Logique ; i++) {
-        printf("[%llu]\t %d \n", col->index[i], col->data[i]);
+        for (int j = 0 ; j < col->T_Logique ; j++) {
+            if (i == col->index[j]) {
+                printf("[%llu] : %d\n", col->index[j] + 1, col->data[j]);
+            }
+        }
     }
     printf("\n");
 }
@@ -221,11 +287,12 @@ int display_menu_1() {
            "21 - Nombre de cellules plus petites qu'une valeur x dans le CDataFrame\n"
            "22 - Trier une colonne\n"
            "23 - Afficher le contenu d'une colonne triée\n"
-           "24 - Effacer l'index d'une colonne\n"
-           "25 - Vérifier si une colonne possède un index\n"
-           "26 - Mettre à jour un index\n"
-           "27 - Faire une recherche dichotomique\n"
-           "28 - Ne rien faire\n");
+           "24 - Afficher le CDataframe en fonction d'une colonne triée\n"
+           "25 - Effacer l'index d'une colonne\n"
+           "26 - Vérifier si une colonne possède un index\n"
+           "27 - Mettre à jour un index\n"
+           "28 - Faire une recherche dichotomique\n"
+           "29 - Ne rien faire\n");
     int action;
 
     do {
@@ -268,11 +335,12 @@ int display_menu_2() {
            "24 - Nombre de cellules plus petites qu'une valeur x dans le CDataFrame\n"
            "25 - Trier une colonne\n"
            "26 - Afficher le contenu d'une colonne triée\n"
-           "27 - Effacer l'index d'une colonne\n"
-           "28 - Vérifier si une colonne possède un index\n"
-           "29 - Mettre à jour un index\n"
-           "30 - Faire une recherche dichotomique\n"
-           "31 - Ne rien faire\n");
+           "27 - Afficher le CDataframe en fonction d'une colonne triée\n"
+           "28 - Effacer l'index d'une colonne\n"
+           "29 - Vérifier si une colonne possède un index\n"
+           "30 - Mettre à jour un index\n"
+           "31 - Faire une recherche dichotomique\n"
+           "32 - Ne rien faire\n");
     int action;
 
     printf("Que voulez-vous faire ?\n");

@@ -33,6 +33,12 @@ void quicksort(int *tab, int left, int right);
 int partition(int *tab, int left, int right);
 
 
+/* Print a CDataframe content
+ * @param1 : Pointer to a CDataframe
+ */
+void print_sort_cdt(CDATAFRAME *cdt, int index);
+
+
 /* Display the content of a sorted column
  * @param1 : Pointer to a column
  */

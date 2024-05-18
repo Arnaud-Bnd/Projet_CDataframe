@@ -1,22 +1,34 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "column.h"
 #include "cdataframe.h"
 #include "features.h"
 
-int main() {
+int main1() {
     CDATAFRAME *cdt = hard_filling();
 
     cdt->column[1]->valid_index = -1;
     sort(cdt->column[1], DESC);
+    print_sort_cdt(cdt, 1);
+    print_cdt(cdt);
+    //print_col(cdt->column[1]);
+    //print_col_by_index(cdt->column[1]);
+
+
+    printf("\n\n");
     for (int i = 0 ; i < cdt->column[1]->T_Logique ; i++) {
-        printf("[%llu] : %d\n", cdt->column[1]->index[i], cdt->column[1]->data[i]);
+        for (int j = 0 ; j < cdt->column[1]->T_Logique ; j++) {
+            if (i == cdt->column[1]->index[j]) {
+                //printf("[%llu] : %d\n", cdt->column[1]->index[j] + 1, cdt->column[1]->data[j]);
+            }
+        }
     }
     return 0;
 }
 
 
-int main1() {
+int main() {
     /* Création d'un CDataFrame */
     // CDATAFRAME *cdt = create_cdataframe("CDataFrame");
     CDATAFRAME *cdt = hard_filling();
@@ -456,7 +468,30 @@ int main1() {
                     break;
                 }
 
-                case 24 : { /* Effacer l'index d'une colonne */
+                case 24 : { /* Afficher le CDataframe en fonction d'une colonne triée */
+                    char name[20];
+                    printf("En fonction de quelle colonne voulez-vous trier le CDataframe ? ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    print_sort_cdt(cdt, index);
+                    break;
+                }
+
+                case 25 : { /* Effacer l'index d'une colonne */
                     char name[20];
                     printf("De quelle colonne triée souhaitez-vous supprimer l'index ? ");
                     scanf("%s", name);
@@ -479,7 +514,7 @@ int main1() {
                     break;
                 }
 
-                case 25 : { /* Vérifier si une colonne possède un index */
+                case 26 : { /* Vérifier si une colonne possède un index */
                     char name[20];
                     printf("De quelle colonne souhaitez-vous vérifier l'existence d'un index ? ");
                     scanf("%s", name);
@@ -508,7 +543,7 @@ int main1() {
                     break;
                 }
 
-                case 26 : { /* Mettre à jour un index */
+                case 27 : { /* Mettre à jour un index */
                     char name[20];
                     printf("De quelle colonne souhaitez-vous mettre à jour l'index ? ");
                     scanf("%s", name);
@@ -532,7 +567,7 @@ int main1() {
                     break;
                 }
 
-                case 27 : { /* Faire une recherche dichotomique */
+                case 28 : { /* Faire une recherche dichotomique */
                     char name[20];
                     printf("Dans quelle colonne triée cherchez-vous la valeur ? ");
                     scanf("%s", name);
@@ -565,7 +600,7 @@ int main1() {
                     break;
                 }
 
-                case 28 : { /* Ne rien faire */
+                case 29 : { /* Ne rien faire */
                     /* Arrêter le programme */
                     return 0;
                 }
@@ -1013,7 +1048,30 @@ int main1() {
                     break;
                 }
 
-                case 27 : { /* Effacer l'index d'une colonne */
+                case 27 : { /* Afficher le CDataframe en fonction d'une colonne triée */
+                    char name[20];
+                    printf("En fonction de quelle colonne voulez-vous trier le CDataframe ? ");
+                    scanf("%s", name);
+                    printf("\n");
+
+                    /* Déterminer l'index de la colonne */
+                    int index = -1;
+                    for (int i = 0; i < cdt->num_columns; i++) {
+                        if (strcmp(cdt->column[i]->title, name) == 0) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        printf("Cette colonne n'existe pas !\n");
+                        break;
+                    }
+
+                    print_sort_cdt(cdt, index);
+                    break;
+                }
+
+                case 28 : { /* Effacer l'index d'une colonne */
                     char name[20];
                     printf("De quelle colonne triée souhaitez-vous supprimer l'index ? ");
                     scanf("%s", name);
@@ -1035,7 +1093,7 @@ int main1() {
                     break;
                 }
 
-                case 28 : { /* Vérifier si une colonne possède un index */
+                case 29 : { /* Vérifier si une colonne possède un index */
                     char name[20];
                     printf("De quelle colonne souhaitez-vous vérifier l'existence d'un index ? ");
                     scanf("%s", name);
@@ -1063,7 +1121,7 @@ int main1() {
                     break;
                 }
 
-                case 29 : { /* Mettre à jour un index */
+                case 30 : { /* Mettre à jour un index */
                     char name[20];
                     printf("De quelle colonne souhaitez-vous mettre à jour l'index ? ");
                     scanf("%s", name);
@@ -1086,7 +1144,7 @@ int main1() {
                     break;
                 }
 
-                case 30 : { /* Faire une recherche dichotomique */
+                case 31 : { /* Faire une recherche dichotomique */
                     char name[20];
                     printf("Dans quelle colonne triée cherchez-vous la valeur ? ");
                     scanf("%s", name);
@@ -1113,7 +1171,7 @@ int main1() {
                     break;
                 }
 
-                case 31 : { /* Ne rien faire */
+                case 32 : { /* Ne rien faire */
                     /* Arrêter le programme */
                     return 0;
                 }

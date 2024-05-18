@@ -37,15 +37,18 @@ void sort(COLUMN *col, int sort_dir) {
 
             /* Si la colonne est partiellement triée */
             else if (col->valid_index == -1) {
-                for (int i = 0; i < col->T_Logique; i++) {
-                    int k = col->data[i];
-                    int j = i;
-                    //printf("%d\n\n", j);
-                    while (j > 0 && col->data[j - 1] > k) {
-                        col->data[j] = col->data[j - 1];
-                        j--;
+                for (int i = 0; i < col->T_Logique - 1; i++) {
+                    int max_idx = i;
+                    for (int j = i + 1; j < col->T_Logique; j++) {
+                        if (col->data[col->index[j]] < col->data[col->index[max_idx]]) {
+                            max_idx = j;
+                        }
                     }
-                    col->data[j] = k;
+                    if (max_idx != i) {
+                        int temp = col->index[i];
+                        col->index[i] = col->index[max_idx];
+                        col->index[max_idx] = temp;
+                    }
                 }
             }
 
@@ -68,7 +71,9 @@ void sort(COLUMN *col, int sort_dir) {
                         }
                     }
                     if (min_idx != i) {
-                        swap(&col->index[i], &col->index[min_idx]);
+                        int temp = col->index[i];
+                        col->index[i] = col->index[min_idx];
+                        col->index[min_idx] = temp;
                     }
                 }
             }
@@ -76,15 +81,6 @@ void sort(COLUMN *col, int sort_dir) {
             break;
         }
     }
-
-
-    /* Initialiser l'index une fois le tri effectué */
-    /*
-    col->index = (unsigned long long *) malloc(col->T_Logique * sizeof (unsigned long long));
-    for (int i = 0 ; i < col->T_Logique ; i ++) {
-        col->index[i] = i;
-    }
-    */
 
     /* Indiquer que la colonne a été triée */
     col->valid_index = 1;
@@ -267,38 +263,39 @@ int display_menu_1() {
            "1 - Créer une colonne d'entiers\n"
            "2 - Remplir un CDataframe avec une saisie\n"
            "3 - Afficher le CDataframe\n"
-           "4 - Afficher une partie des lignes du CDataFrame\n"
-           "5 - Afficher une partie des colonnes du CDataFrame\n"
-           "6 - Ajouter une ligne de valeurs au CDataFrame\n"
-           "7 - Supprimer une ligne de valeurs du CDataFrame\n"
-           "8 - Supprimer une colonne du CDataFrame\n"
-           "9 - Renommer le titre d'une colonne du CDataFrame\n"
-           "10 - Chercher une valeur dans le CDataFrame\n"
-           "11 - Remplacer une cellule du CDataFrame\n"
-           "12 - Accéder à la valeur d'une cellule du CDataFrame\n"
-           "13 - Afficher le nom des colonnes du CDataFrame\n"
-           "14 - Afficher le nombre de lignes du CDataFrame\n"
-           "15 - Afficher le nombre de colonnes du CDataFrame\n"
-           "16 - Nombre de cellules égale à une valeur x dans une colonne\n"
-           "17 - Nombre de cellules plus grandes qu'une valeur x dans une colonne\n"
-           "18 - Nombre de cellules plus petites qu'une valeur x dans une colonne\n"
-           "19 - Nombre de cellules égale à une valeur x dans le CDataFrame\n"
-           "20 - Nombre de cellules plus grandes qu'une valeur x dans le CDataFrame\n"
-           "21 - Nombre de cellules plus petites qu'une valeur x dans le CDataFrame\n"
-           "22 - Trier une colonne\n"
-           "23 - Afficher le contenu d'une colonne triée\n"
-           "24 - Afficher le CDataframe en fonction d'une colonne triée\n"
-           "25 - Effacer l'index d'une colonne\n"
-           "26 - Vérifier si une colonne possède un index\n"
-           "27 - Mettre à jour un index\n"
-           "28 - Faire une recherche dichotomique\n"
-           "29 - Ne rien faire\n");
+           "4 - Afficher une colonne du CDataframe\n"
+           "5 - Afficher une partie des lignes du CDataFrame\n"
+           "6 - Afficher une partie des colonnes du CDataFrame\n"
+           "7 - Ajouter une ligne de valeurs au CDataFrame\n"
+           "8 - Supprimer une ligne de valeurs du CDataFrame\n"
+           "9 - Supprimer une colonne du CDataFrame\n"
+           "10 - Renommer le titre d'une colonne du CDataFrame\n"
+           "11 - Chercher une valeur dans le CDataFrame\n"
+           "12 - Remplacer une cellule du CDataFrame\n"
+           "13 - Accéder à la valeur d'une cellule du CDataFrame\n"
+           "14 - Afficher le nom des colonnes du CDataFrame\n"
+           "15 - Afficher le nombre de lignes du CDataFrame\n"
+           "16 - Afficher le nombre de colonnes du CDataFrame\n"
+           "17 - Nombre de cellules égale à une valeur x dans une colonne\n"
+           "18 - Nombre de cellules plus grandes qu'une valeur x dans une colonne\n"
+           "19 - Nombre de cellules plus petites qu'une valeur x dans une colonne\n"
+           "20 - Nombre de cellules égale à une valeur x dans le CDataFrame\n"
+           "21 - Nombre de cellules plus grandes qu'une valeur x dans le CDataFrame\n"
+           "22 - Nombre de cellules plus petites qu'une valeur x dans le CDataFrame\n"
+           "23 - Trier une colonne\n"
+           "24 - Afficher le contenu d'une colonne triée\n"
+           "25 - Afficher le CDataframe en fonction d'une colonne triée\n"
+           "26 - Effacer l'index d'une colonne\n"
+           "27 - Vérifier si une colonne possède un index\n"
+           "28 - Mettre à jour un index\n"
+           "29 - Faire une recherche dichotomique\n"
+           "30 - Ne rien faire\n");
     int action;
 
     do {
         printf("Que voulez-vous faire ?\n");
         scanf("%d", &action);
-    } while (action <= 0 || action >= 30);
+    } while (action <= 0 || action > 30);
 
     return action;
 }
@@ -314,39 +311,40 @@ int display_menu_2() {
            "3 - Afficher la colonne préalablement créée\n"
            "4 - Remplir un CDataframe avec une saisie\n"
            "5 - Afficher le CDataframe\n"
-           "6 - Afficher une partie des lignes du CDataFrame\n"
-           "7 - Afficher une partie des colonnes du CDataFrame\n"
-           "8 - Ajouter une ligne de valeurs au CDataFrame\n"
-           "9 - Supprimer une ligne de valeurs du CDataFrame\n"
-           "10 - Ajouter une colonne au CDataFrame\n"
-           "11 - Supprimer une colonne du CDataFrame\n"
-           "12 - Renommer le titre d'une colonne du CDataFrame\n"
-           "13 - Chercher une valeur dans le CDataFrame\n"
-           "14 - Remplacer une cellule du CDataFrame\n"
-           "15 - Accéder à la valeur d'une cellule du CDataFrame\n"
-           "16 - Afficher le nom des colonnes du CDataFrame\n"
-           "17 - Afficher le nombre de lignes du CDataFrame\n"
-           "18 - Afficher le nombre de colonnes du CDataFrame\n"
-           "19 - Nombre de cellules égale à une valeur x dans une colonne\n"
-           "20 - Nombre de cellules plus grandes qu'une valeur x dans une colonne\n"
-           "21 - Nombre de cellules plus petites qu'une valeur x dans une colonne\n"
-           "22 - Nombre de cellules égale à une valeur x dans le CDataFrame\n"
-           "23 - Nombre de cellules plus grandes qu'une valeur x dans le CDataFrame\n"
-           "24 - Nombre de cellules plus petites qu'une valeur x dans le CDataFrame\n"
-           "25 - Trier une colonne\n"
-           "26 - Afficher le contenu d'une colonne triée\n"
-           "27 - Afficher le CDataframe en fonction d'une colonne triée\n"
-           "28 - Effacer l'index d'une colonne\n"
-           "29 - Vérifier si une colonne possède un index\n"
-           "30 - Mettre à jour un index\n"
-           "31 - Faire une recherche dichotomique\n"
-           "32 - Ne rien faire\n");
+           "6 - Afficher une colonne du CDataframe\n"
+           "7 - Afficher une partie des lignes du CDataFrame\n"
+           "8 - Afficher une partie des colonnes du CDataFrame\n"
+           "9 - Ajouter une ligne de valeurs au CDataFrame\n"
+           "10 - Supprimer une ligne de valeurs du CDataFrame\n"
+           "11 - Ajouter une colonne au CDataFrame\n"
+           "12 - Supprimer une colonne du CDataFrame\n"
+           "13 - Renommer le titre d'une colonne du CDataFrame\n"
+           "14 - Chercher une valeur dans le CDataFrame\n"
+           "15 - Remplacer une cellule du CDataFrame\n"
+           "16 - Accéder à la valeur d'une cellule du CDataFrame\n"
+           "17 - Afficher le nom des colonnes du CDataFrame\n"
+           "18 - Afficher le nombre de lignes du CDataFrame\n"
+           "19 - Afficher le nombre de colonnes du CDataFrame\n"
+           "20 - Nombre de cellules égale à une valeur x dans une colonne\n"
+           "21 - Nombre de cellules plus grandes qu'une valeur x dans une colonne\n"
+           "22 - Nombre de cellules plus petites qu'une valeur x dans une colonne\n"
+           "23 - Nombre de cellules égale à une valeur x dans le CDataFrame\n"
+           "24 - Nombre de cellules plus grandes qu'une valeur x dans le CDataFrame\n"
+           "25 - Nombre de cellules plus petites qu'une valeur x dans le CDataFrame\n"
+           "26 - Trier une colonne\n"
+           "27 - Afficher le contenu d'une colonne triée\n"
+           "28 - Afficher le CDataframe en fonction d'une colonne triée\n"
+           "29 - Effacer l'index d'une colonne\n"
+           "30 - Vérifier si une colonne possède un index\n"
+           "31 - Mettre à jour un index\n"
+           "32 - Faire une recherche dichotomique\n"
+           "33 - Ne rien faire\n");
     int action;
 
     printf("Que voulez-vous faire ?\n");
     do {
         scanf("%d", &action);
-    } while (action <= 0 || action >= 30);
+    } while (action <= 0 || action > 33);
 
     return action;
 }

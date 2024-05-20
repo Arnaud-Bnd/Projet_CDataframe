@@ -2,8 +2,15 @@
 // Created by Arnaud Bernard on 29/04/2024.
 //
 #include "features.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
 
 void sort(COLUMN *col, int sort_dir) {
@@ -29,17 +36,20 @@ void sort(COLUMN *col, int sort_dir) {
                 quicksort(col->data, 0, col->T_Logique - 1);
             }
 
-                /* Si la colonne est partiellement triée */
+            /* Si la colonne est partiellement triée */
             else if (col->valid_index == -1) {
-                for (int i = 0; i < col->T_Logique; i++) {
-                    int k = col->data[i];
-                    int j = i;
-                    //printf("%d\n\n", j);
-                    while (j > 0 && col->data[j - 1] > k) {
-                        col->data[j] = col->data[j - 1];
-                        j--;
+                for (int i = 0; i < col->T_Logique - 1; i++) {
+                    int max_idx = i;
+                    for (int j = i + 1; j < col->T_Logique; j++) {
+                        if (col->data[col->index[j]] < col->data[col->index[max_idx]]) {
+                            max_idx = j;
+                        }
                     }
-                    col->data[j] = k;
+                    if (max_idx != i) {
+                        int temp = col->index[i];
+                        col->index[i] = col->index[max_idx];
+                        col->index[max_idx] = temp;
+                    }
                 }
             }
 
@@ -54,28 +64,23 @@ void sort(COLUMN *col, int sort_dir) {
 
             /* Si la colonne est partiellement triée */
             else if (col->valid_index == -1) {
-                for (int i = 0; i < col->T_Logique; i++) {
-                    int k = col->data[i];
-                    int j = i;
-                    //printf("%d\n\n", j);
-                    while (j > 0 && col->data[j - 1] < k) {
-                        col->data[j] = col->data[j - 1];
-                        j--;
+                for (int i = 0; i < col->T_Logique - 1; i++) {
+                    int min_idx = i;
+                    for (int j = i + 1; j < col->T_Logique; j++) {
+                        if (col->data[col->index[j]] > col->data[col->index[min_idx]]) {
+                            min_idx = j;
+                        }
                     }
-                    col->data[j] = k;
+                    if (min_idx != i) {
+                        int temp = col->index[i];
+                        col->index[i] = col->index[min_idx];
+                        col->index[min_idx] = temp;
+                    }
                 }
             }
 
             break;
         }
-
-    }
-
-
-    /* Initialiser l'index une fois le tri effectué */
-    col->index = (unsigned long long *) malloc(col->T_Logique * sizeof (unsigned long long));
-    for (int i = 0 ; i < col->T_Logique ; i ++) {
-        col->index[i] = i;
     }
 
     /* Indiquer que la colonne a été triée */
@@ -114,6 +119,59 @@ int partition(int *tab, int left, int right) {
 }
 
 
+void print_sort_cdt(CDATAFRAME *cdt, int index){
+    /* Vérification de la taille du CDataframe */
+    if (cdt == NULL) {
+        printf("Le pointeur CDataframe est NULL.\n");
+        return;
+    }
+
+    if (cdt->column[index]->valid_index != 1) {
+        printf("La colonne n'est pas triée.\n");
+        return;
+    }
+
+    /* Afficher le titre du CDataframe */
+    printf("%s\n", cdt->title);
+
+    /* Vérification du nombre de colonnes */
+    if (cdt->num_columns == 0) {
+        printf("Le CDataframe n'a pas de colonnes.\n");
+        return;
+    }
+
+    /* Boucle pour les titres des colonnes */
+    printf("\t\t");
+    for (int i = 0 ; i < cdt->num_columns ; i++) {
+        // Afficher le titre de la colonne
+        printf("%s\t\t", (char *) cdt->column[i]->title);
+    }
+    printf("\n");
+
+    /* Trouver la colonne avec le plus de lignes */
+    int max_rows = number_of_lines(cdt);
+
+    /* Boucle pour les valeurs des colonnes */
+    for (int j = 0 ; j < max_rows ; j++){   // Variation de la ligne
+        /* Afficher le numéro de la ligne */
+        printf("[%d]\t\t", j + 1);
+
+        /* Afficher les valeurs */
+        for (int i = 0 ; i < cdt->num_columns ; i++) {    // Variation de la colonne
+            for (int k = 0 ; i < cdt->num_columns ; k++) {    // Variation de l'index
+                if (j == cdt->column[index]->index[k]) {
+                    // Afficher la valeur
+                    printf("%d\t\t\t\t", cdt->column[i]->data[k]);
+                    break;
+                }
+            }
+        }
+        printf("\n"); // Passage à la ligne suivante
+    }
+    printf("\n");
+}
+
+
 void print_col_by_index(COLUMN *col) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
@@ -128,7 +186,11 @@ void print_col_by_index(COLUMN *col) {
 
     /* Afficher les données de la colonne triée */
     for (int i = 0 ; i < col->T_Logique ; i++) {
-        printf("[%llu]\t %d \n", col->index[i], col->data[i]);
+        for (int j = 0 ; j < col->T_Logique ; j++) {
+            if (i == col->index[j]) {
+                printf("[%llu] : %d\n", col->index[j] + 1, col->data[j]);
+            }
+        }
     }
     printf("\n");
 }
@@ -158,35 +220,39 @@ int search_value_in_column(COLUMN *col, int val) {
     /* Vérification du tri de la colonne */
     if (col->valid_index == -1 || col->valid_index == 0){
         printf("La colonne n'est pas triée.\n");
-        return -1;
+        return -2;
     }
 
     /* Initialisation des variables */
-    int m, g = 0, d = col->T_Logique - 1, res, arret = 0;
+    int m, g = 0, d = col->T_Logique - 1;
 
-    /* Recherche dichotomique */
-    do {
-        m = (g + d) / 2;
-        if (val == col->data[m]){
-            arret = 1;
-            res = 1;
-        }
-        else {
-            if (val > col->data[m]) {
+    /* Recherche dichotomique par ordre croissant*/
+    if (col->sort_dir == ASC) {
+        while (g <= d) {
+            m = (g + d) / 2;
+            if (val == col->data[m]) {
+                return m;
+            } else if (val > col->data[m]) {
                 g = m + 1;
-            }
-            else {
+            } else {
                 d = m - 1;
             }
-
-            if (g > d) {
-                arret = 1;
-                res = 0;
+        }
+    }
+    /* Recherche dichotomique par ordre décroissant*/
+    else {
+        while (g <= d) {
+            m = (g + d) / 2;
+            if (val == col->data[m]) {
+                return m;
+            } else if (val < col->data[m]) {
+                g = m + 1;
+            } else {
+                d = m - 1;
             }
         }
-    } while (arret != 1);
-
-    return res;
+    }
+    return -1;
 }
 
 
@@ -198,34 +264,41 @@ int display_menu_1() {
            "1 - Créer une colonne d'entiers\n"
            "2 - Remplir un CDataframe avec une saisie\n"
            "3 - Afficher le CDataframe\n"
-           "4 - Afficher une partie des lignes du CDataFrame\n"
-           "5 - Afficher une partie des colonnes du CDataFrame\n"
-           "6 - Ajouter une ligne de valeurs au CDataFrame\n"
-           "7 - Supprimer une ligne de valeurs du CDataFrame\n"
-           "8 - Supprimer une colonne du CDataFrame\n"
-           "9 - Renommer le titre d'une colonne du CDataFrame\n"
-           "10 - Chercher une valeur dans le CDataFrame\n"
-           "11 - Remplacer une cellule du CDataFrame\n"
-           "12 - Accéder à la valeur d'une cellule du CDataFrame\n"
-           "13 - Afficher le nom des colonnes du CDataFrame\n"
-           "14 - Afficher le nombre de lignes du CDataFrame\n"
-           "15 - Afficher le nombre de colonnes du CDataFrame\n"
-           "16 - Nombre de cellules égale à une valeur x\n"
-           "17 - Nombre de cellules plus grandes qu'une valeur x\n"
-           "18 - Nombre de cellules plus petites qu'une valeur x\n"
-           "19 - Trier une colonne\n"
-           "20 - Afficher le contenu d'une colonne triée\n"
-           "21 - Effacer l'index d'une colonne\n"
-           "22 - Vérifier si une colonne possède un index\n"
-           "23 - Mettre à jour un index\n"
-           "24 - Faire une recherche dichotomique\n"
-           "25 - Ne rien faire\n");
+           "4 - Afficher une colonne du CDataframe\n"
+           "5 - Afficher une partie des lignes du CDataFrame\n"
+           "6 - Afficher une partie des colonnes du CDataFrame\n"
+           "7 - Ajouter une ligne de valeurs au CDataFrame\n"
+           "8 - Supprimer une ligne de valeurs du CDataFrame\n"
+           "9 - Supprimer une colonne du CDataFrame\n"
+           "10 - Renommer le titre d'une colonne du CDataFrame\n"
+           "11 - Chercher une valeur dans le CDataFrame\n"
+           "12 - Remplacer une cellule du CDataFrame\n"
+           "13 - Accéder à la valeur d'une cellule du CDataFrame\n"
+           "14 - Afficher le nom des colonnes du CDataFrame\n"
+           "15 - Afficher le nombre de lignes du CDataFrame\n"
+           "16 - Afficher le nombre de colonnes du CDataFrame\n"
+           "17 - Nombre de cellules égale à une valeur x dans une colonne\n"
+           "18 - Nombre de cellules plus grandes qu'une valeur x dans une colonne\n"
+           "19 - Nombre de cellules plus petites qu'une valeur x dans une colonne\n"
+           "20 - Nombre de cellules égale à une valeur x dans le CDataFrame\n"
+           "21 - Nombre de cellules plus grandes qu'une valeur x dans le CDataFrame\n"
+           "22 - Nombre de cellules plus petites qu'une valeur x dans le CDataFrame\n"
+           "23 - Trier une colonne\n"
+           "24 - Afficher le contenu d'une colonne triée\n"
+           "25 - Afficher le CDataframe en fonction d'une colonne triée\n"
+           "26 - Effacer l'index d'une colonne\n"
+           "27 - Vérifier si une colonne possède un index\n"
+           "28 - Mettre à jour un index\n"
+           "29 - Faire une recherche dichotomique\n"
+           "30 - Charger un fichier data.csv\n"
+           "31 - Sauvegarder le CDataframe dans un cdataframe.csv\n"
+           "32 - Ne rien faire\n");
     int action;
 
     do {
         printf("Que voulez-vous faire ?\n");
         scanf("%d", &action);
-    } while (action <= 0 || action >= 30);
+    } while (action <= 0 || action > 32);
 
     return action;
 }
@@ -241,35 +314,155 @@ int display_menu_2() {
            "3 - Afficher la colonne préalablement créée\n"
            "4 - Remplir un CDataframe avec une saisie\n"
            "5 - Afficher le CDataframe\n"
-           "6 - Afficher une partie des lignes du CDataFrame\n"
-           "7 - Afficher une partie des colonnes du CDataFrame\n"
-           "8 - Ajouter une ligne de valeurs au CDataFrame\n"
-           "9!!! - Supprimer une ligne de valeurs du CDataFrame\n"
-           "10 - Ajouter une colonne au CDataFrame\n"
-           "11 - Supprimer une colonne du CDataFrame\n"
-           "12 - Renommer le titre d'une colonne du CDataFrame\n"
-           "13 - Chercher une valeur dans le CDataFrame\n"
-           "14 - Remplacer une cellule du CDataFrame\n"
-           "15 - Accéder à la valeur d'une cellule du CDataFrame\n"
-           "16 - Afficher le nom des colonnes du CDataFrame\n"
-           "17 - Afficher le nombre de lignes du CDataFrame\n"
-           "18 - Afficher le nombre de colonnes du CDataFrame\n"
-           "19 - Nombre de cellules égale à une valeur x\n"
-           "20 - Nombre de cellules plus grandes qu'une valeur x\n"
-           "21 - Nombre de cellules plus petites qu'une valeur x\n"
-           "22 - Trier une colonne\n"
-           "23 - Afficher le contenu d'une colonne triée\n"
-           "24 - Effacer l'index d'une colonne\n"
-           "25 - Vérifier si une colonne possède un index\n"
-           "26 - Mettre à jour un index\n"
-           "27 - Faire une recherche dichotomique\n"
-           "28 - Ne rien faire\n");
+           "6 - Afficher une colonne du CDataframe\n"
+           "7 - Afficher une partie des lignes du CDataFrame\n"
+           "8 - Afficher une partie des colonnes du CDataFrame\n"
+           "9 - Ajouter une ligne de valeurs au CDataFrame\n"
+           "10 - Supprimer une ligne de valeurs du CDataFrame\n"
+           "11 - Ajouter une colonne au CDataFrame\n"
+           "12 - Supprimer une colonne du CDataFrame\n"
+           "13 - Renommer le titre d'une colonne du CDataFrame\n"
+           "14 - Chercher une valeur dans le CDataFrame\n"
+           "15 - Remplacer une cellule du CDataFrame\n"
+           "16 - Accéder à la valeur d'une cellule du CDataFrame\n"
+           "17 - Afficher le nom des colonnes du CDataFrame\n"
+           "18 - Afficher le nombre de lignes du CDataFrame\n"
+           "19 - Afficher le nombre de colonnes du CDataFrame\n"
+           "20 - Nombre de cellules égale à une valeur x dans une colonne\n"
+           "21 - Nombre de cellules plus grandes qu'une valeur x dans une colonne\n"
+           "22 - Nombre de cellules plus petites qu'une valeur x dans une colonne\n"
+           "23 - Nombre de cellules égale à une valeur x dans le CDataFrame\n"
+           "24 - Nombre de cellules plus grandes qu'une valeur x dans le CDataFrame\n"
+           "25 - Nombre de cellules plus petites qu'une valeur x dans le CDataFrame\n"
+           "26 - Trier une colonne\n"
+           "27 - Afficher le contenu d'une colonne triée\n"
+           "28 - Afficher le CDataframe en fonction d'une colonne triée\n"
+           "29 - Effacer l'index d'une colonne\n"
+           "30 - Vérifier si une colonne possède un index\n"
+           "31 - Mettre à jour un index\n"
+           "32 - Faire une recherche dichotomique\n"
+           "33 - Charger un fichier data.csv\n"
+           "32 - Sauvegarder le CDataframe dans un cdataframe.csv\n"
+           "34 - Ne rien faire\n");
     int action;
 
     printf("Que voulez-vous faire ?\n");
     do {
         scanf("%d", &action);
-    } while (action <= 0 || action >= 30);
+    } while (action <= 0 || action > 34);
 
     return action;
+}
+
+
+CDATAFRAME* load_from_csv(char *file_name, int size) {
+    /* Ouverture du fichier en mode lecture */
+    FILE* file = fopen(file_name, "rt");;
+
+    /* Vérifier si le fichier est vide ou non */
+    if (file == NULL) {
+        printf("Ouverture du fichier impossible.\n");
+        return NULL;
+    }
+
+
+    char ligne[150];
+    char *ptr_chaine;
+
+    if (fgets(ligne, 150, file) == NULL) {
+        printf("Erreur lors de la lecture du fichier.\n");
+
+        /* Fermeture du fichier */
+        fclose(file);
+        return NULL;
+    }
+
+    /* Création du CDataframe */
+    CDATAFRAME *cdt = create_cdataframe("Loaded CDataframe");
+
+    /* Enlever les caractères en fin de ligne */
+    ligne[strcspn(ligne, "\n")] = 0;
+
+    /* Créer les colonnes à partir des noms et les insérer dans le CDataframe */
+    /* Création d'un token */
+    ptr_chaine = strtok(ligne, ";");
+    while (ptr_chaine != NULL) {
+        //printf("%s\n", ptr_chaine);
+        /* Création de la colonne à partir du nom */
+        COLUMN *new_col = create_column(ptr_chaine);
+        /* Insérer la colonne dans le CDataframe */
+        insert_column(cdt, new_col);
+        /* Mettre le token à NULL */
+        ptr_chaine = strtok(NULL, ";");
+    }
+
+    /* Parcours de chaque ligne */
+    while (fgets(ligne, 150, file) != NULL) {
+        /* Considérer les \n comme nul, donc 0 */
+        ligne[strcspn(ligne, "\n")] = 0;
+
+        /* Indique la colonne dans laquelle on se trouve */
+        int col_idx = 0;
+
+        /* Séparation des valeurs */
+        ptr_chaine = strtok(ligne, ";");
+        while (ptr_chaine != NULL) {
+            int value;
+            /* Si la chaine est NULL, alors donner la valeur 0 */
+            if (strcmp(ptr_chaine, "NULL") == 0)
+                value = 0;
+            /* Sinon la convertir en int */
+            else
+                value = atoi(ptr_chaine);
+
+            /* Insertion de la valeur dans la colonne */
+            insert_value(cdt->column[col_idx], value);
+            /* Changement de colonne */
+            col_idx++;
+            ptr_chaine = strtok(NULL, ";");
+        }
+    }
+
+    /* Fermeture du fichier */
+    fclose(file);
+    return cdt;
+}
+
+
+void save_into_csv(CDATAFRAME *cdf, char *file_name) {
+    /* Ouverture du fichier en mode écriture */
+    FILE *file = fopen(file_name, "w");
+
+    /* Vérifier que l'ouverture s'est bien faite */
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier pour écriture.\n");
+        return;
+    }
+
+    /* Écrire les noms des colonnes */
+    for (int i = 0; i < cdf->num_columns; i++) {
+        fprintf(file, "%s", cdf->column[i]->title);
+
+        /* Écrire le séparateur après chaque nom sauf le dernier */
+        if (i < cdf->num_columns - 1) {
+            fprintf(file, ";");
+        }
+    }
+    fprintf(file, "\n");
+
+    /* Écriture des données du CDataframe */
+    for (int i = 0; i < cdf->column[0]->T_Logique; i++) {   // Variation des lignes
+        for (int j = 0; j < cdf->num_columns; j++) {        // Variation des colonnes
+            fprintf(file, "%d", cdf->column[j]->data[i]);
+
+            /* Écrire le séparateur après chaque nom sauf le dernier */
+            if (j < cdf->num_columns - 1) {
+                fprintf(file, ";");
+            }
+        }
+        fprintf(file, "\n");
+    }
+
+    /* Fermeture du fichier */
+    fclose(file);
 }

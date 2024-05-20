@@ -32,6 +32,9 @@ int insert_value(COLUMN* col, int value) {
         col->T_Physique += REALLOC_SIZE * sizeof (int);
         col->data = (int*) malloc(col->T_Physique);
 
+        /* Allouer la place nécessaire à l'index */
+        col->index = (unsigned long long *) malloc(0 * sizeof (unsigned long long));
+
         /* Vérification de la bonne allocation */
         if (col->data == NULL) {
             printf("Échec de la réallocation de la mémoire.\n");
@@ -53,6 +56,14 @@ int insert_value(COLUMN* col, int value) {
 
     /* S'il y a assez de place, insérer la valeur */
     col->data[(col->T_Logique)++] = value;
+
+    /* Indiquer que la colonne n'est plus triée */
+    col->valid_index = -1;
+
+    /* Indiquer l'index associé à la valeur */
+    col->index = realloc(col->index, sizeof (unsigned long long) * col->T_Logique);
+    col->index[col->T_Logique - 1] = col->T_Logique - 1;
+
     return 1;
 }
 
@@ -75,8 +86,8 @@ void delete_column(COLUMN *col) {
     col->title = NULL;
 
     /* Libère la mémoire allouée à la colonne */
-    free(col);
-    col = NULL;
+    //free(col);
+    //col = NULL;
 }
 
 
@@ -87,14 +98,12 @@ void print_col(COLUMN* col) {
         return;
     }
 
-    if (col->valid_index != 1)
-
     /* Afficher le titre de la colonne */
     printf("\n%s \n", col->title);
 
     /* Afficher les données de la colonne */
     for (int i = 0 ; i < col->T_Logique ; i++) {
-        printf("[%d]\t %d \n", i, col->data[i]);
+        printf("[%d]\t %d \n", i + 1, col->data[i]);
     }
     printf("\n");
 }

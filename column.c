@@ -13,7 +13,9 @@ COLUMN *create_column(char* title) {
     column->T_Logique = 0;
     column->T_Physique = 0;
     column->data = NULL;
-
+    column->index = NULL;
+    column->valid_index = 0;
+    column->sort_dir = 0;
     return column;
 }
 
@@ -21,7 +23,7 @@ COLUMN *create_column(char* title) {
 int insert_value(COLUMN* col, int value) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
-        printf("Column pointer is NULL\n");
+        printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
@@ -30,9 +32,12 @@ int insert_value(COLUMN* col, int value) {
         col->T_Physique += REALLOC_SIZE * sizeof (int);
         col->data = (int*) malloc(col->T_Physique);
 
+        /* Allouer la place nécessaire à l'index */
+        col->index = (unsigned long long *) malloc(0 * sizeof (unsigned long long));
+
         /* Vérification de la bonne allocation */
         if (col->data == NULL) {
-            printf("Memory allocation failed\n");
+            printf("Échec de la réallocation de la mémoire.\n");
             return 0;
         }
     }
@@ -42,15 +47,23 @@ int insert_value(COLUMN* col, int value) {
         col->T_Physique += REALLOC_SIZE * sizeof (int);
         col->data = realloc(col->data, col->T_Physique);
 
-        /* Vérification de la bonne réallocation) */
+        /* Vérification de la bonne réallocation */
         if (col->T_Physique == col->T_Logique) {
-            printf("Memory reallocation failed\n");
+            printf("Échec de la réallocation de la mémoire.\n");
             return 0;
         }
     }
 
     /* S'il y a assez de place, insérer la valeur */
     col->data[(col->T_Logique)++] = value;
+
+    /* Indiquer que la colonne n'est plus triée */
+    col->valid_index = -1;
+
+    /* Indiquer l'index associé à la valeur */
+    col->index = realloc(col->index, sizeof (unsigned long long) * col->T_Logique);
+    col->index[col->T_Logique - 1] = col->T_Logique - 1;
+
     return 1;
 }
 
@@ -58,7 +71,7 @@ int insert_value(COLUMN* col, int value) {
 void delete_column(COLUMN *col) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
-        printf("Column pointer is already NULL\n");
+        printf("Le pointeur colonne est déjà NULL.\n");
         return;
     }
 
@@ -73,15 +86,15 @@ void delete_column(COLUMN *col) {
     col->title = NULL;
 
     /* Libère la mémoire allouée à la colonne */
-    free(col);
-    col = NULL;
+    //free(col);
+    //col = NULL;
 }
 
 
 void print_col(COLUMN* col) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
-        printf("Column pointer is NULL\n");
+        printf("Le pointeur colonne est NULL.\n");
         return;
     }
 
@@ -99,7 +112,7 @@ void print_col(COLUMN* col) {
 int number_occ(COLUMN* col, int value) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
-        printf("Column pointer is NULL\n");
+        printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
@@ -119,7 +132,7 @@ int number_occ(COLUMN* col, int value) {
 int val_at_pos(COLUMN* col, int pos) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
-        printf("Column pointer is NULL\n");
+        printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
@@ -127,15 +140,15 @@ int val_at_pos(COLUMN* col, int pos) {
     if (pos <= col->T_Logique)
         return col->data[pos];
 
-    /* Sinon retourner NULL (0) */
-    return (int) NULL;
+    /* Sinon retourner 0 */
+    return 0;
 }
 
 
 int greater_than(COLUMN* col, int x) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
-        printf("Column pointer is NULL\n");
+        printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
@@ -155,7 +168,7 @@ int greater_than(COLUMN* col, int x) {
 int less_than(COLUMN* col, int x) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
-        printf("Column pointer is NULL\n");
+        printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
@@ -175,7 +188,7 @@ int less_than(COLUMN* col, int x) {
 int equal_to(COLUMN* col, int x) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
-        printf("Column pointer is NULL\n");
+        printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 

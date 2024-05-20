@@ -21,13 +21,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="948e872f-abfc-47ab-beee-5af097691ce8" name="Changes" comment="Régler problème commit">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_04_2024__23_06__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_04_2024__23_06__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features.c" beforeDir="false" afterPath="$PROJECT_DIR$/features.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features.h" beforeDir="false" afterPath="$PROJECT_DIR$/features.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ChangesViewManager" show_ignored="true" />
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
     <option name="clangWarnings" value="-Wno-unused-variable,-Wno-infinite-recursion,-Wno-array-bounds,-Wno-return-stack-address,-Werror=implicit-function-declaration,-Wshadow,-Wno-shadow-field-in-constructor-modified,-Wno-shadow-ivar,-Wuninitialized,-Wunused-label,-Wunused-lambda-capture,-Wno-deprecated-declarations" />
@@ -49,7 +52,7 @@
     </excluded-from-favorite>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="CDataframe" />
+        <entry key="$PROJECT_DIR$" value="Features" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -99,7 +102,7 @@
     &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Fonctions__base&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -139,8 +142,13 @@
       <workItem from="1714055259328" duration="5731000" />
       <workItem from="1714140425084" duration="37779000" />
       <workItem from="1714375655491" duration="2516000" />
-      <workItem from="1714396491751" duration="312000" />
-      <workItem from="1715777846448" duration="5000" />
+      <workItem from="1714396491751" duration="29938000" />
+      <workItem from="1714660777884" duration="669000" />
+      <workItem from="1714921126776" duration="610000" />
+      <workItem from="1715010307012" duration="11111000" />
+      <workItem from="1715074325176" duration="6578000" />
+      <workItem from="1715698064600" duration="606000" />
+      <workItem from="1715777706725" duration="47977000" />
     </task>
     <task id="LOCAL-00001" summary="Ajout fonction : create_column">
       <option name="closed" value="true" />
@@ -382,7 +390,79 @@
       <option name="project" value="LOCAL" />
       <updated>1714375911009</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Régler problème commit">
+      <option name="closed" value="true" />
+      <created>1714397218384</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1714397218384</updated>
+    </task>
+    <task id="LOCAL-00032" summary="- Ajout fonction sort (pas encore fonctionnelle)&#10;- Ajout fonction quicksort (devrait être fonctionnelle)&#10;- Ajout fonction partition (devrait être fonctionnelle)&#10;- Ajout fonction print_col_by_index (fonctionnelle)&#10;- Ajout fonction erase_index (fonctionnelle)&#10;- Ajout fonction check_index (fonctionnelle)&#10;- Ajout update_index (fonctionnelle)&#10;- Ajout fonction search_value_in_column (fonctionnelle)">
+      <option name="closed" value="true" />
+      <created>1714577078646</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1714577078646</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Réglé problème commit">
+      <option name="closed" value="true" />
+      <created>1714577284361</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1714577284361</updated>
+    </task>
+    <task id="LOCAL-00034" summary="- Ajout fonction print_col_of_cdt&#10;- Ajout fonction insert_line&#10;- Ajout delete_line&#10;- Ajout fonction delete_col&#10;- Ajout fonction rename_col&#10;- Ajout fonction search_value&#10;- Ajout fonction select_cell">
+      <option name="closed" value="true" />
+      <created>1715793436860</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1715793436860</updated>
+    </task>
+    <task id="LOCAL-00035" summary="- Ajout fonctions spécifiques aux colonnes">
+      <option name="closed" value="true" />
+      <created>1716046551311</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1716046551311</updated>
+    </task>
+    <task id="LOCAL-00036" summary="- Affichage du CDataframe en fonction d'une colonne triée">
+      <option name="closed" value="true" />
+      <created>1716054171847</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1716054171847</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Régler problème commit">
+      <option name="closed" value="true" />
+      <created>1716054248995</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1716054248995</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Ajout possibilité d'afficher une seu colonne du CDataframe">
+      <option name="closed" value="true" />
+      <created>1716056559427</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1716056559427</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Régler problème commit">
+      <option name="closed" value="true" />
+      <created>1716056578797</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1716056578797</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -432,12 +512,17 @@
     <MESSAGE value="Changement lien github dans le README.md" />
     <MESSAGE value="Ajout test dans le main.c" />
     <MESSAGE value="Ajout prototypes des fonctions dans le cdataframe.h" />
-    <MESSAGE value="Réglé problème commit" />
     <MESSAGE value="Ajout README.md dans la branche CDataframe" />
     <MESSAGE value="- Ajout fonction user_input (pas fonctionnelle)&#10;- Ajout fonction hard_filling (pas fonctionnelle)&#10;- Ajout fonction print_cdt (normalement fonctionnelle)&#10;- Ajout fonction print_lines (fonctionnelle)&#10;- Ajout fonction insert_column (à moitié fonctionnelle)&#10;- Ajout fonction replace_cell (pas fonctionnelle)&#10;- Ajout fonction print_name_col (fonctionnelle)&#10;- Ajout fonction number_of_lines (fonctionnelle)&#10;- Ajout fonction number_of_cols (fonctionnelle)&#10;- Ajout fonction cell_equal_to (fonctionnelle)&#10;- Ajout fonction cell_greater_than (fonctionnelle)&#10;- Ajout fonction cell_less_than (fonctionnelle)" />
     <MESSAGE value="- Fonction user_input (fonctionnelle)&#10;- Fonction hard_filling (pas fonctionnelle --&gt; limitée à 2 colonnes)&#10;- Fonction print_cdt (fonctionnelle)&#10;- Fonction insert_column (fonctionnelle)&#10;- Fonction replace_cell (fonctionnelle)" />
     <MESSAGE value="- Ajout de la condition (pointeur == NULL) dans toutes les fonctions déjà existante" />
     <MESSAGE value="- Fonction print_cdt fonctionnelle" />
+    <MESSAGE value="- Ajout fonction sort (pas encore fonctionnelle)&#10;- Ajout fonction quicksort (devrait être fonctionnelle)&#10;- Ajout fonction partition (devrait être fonctionnelle)&#10;- Ajout fonction print_col_by_index (fonctionnelle)&#10;- Ajout fonction erase_index (fonctionnelle)&#10;- Ajout fonction check_index (fonctionnelle)&#10;- Ajout update_index (fonctionnelle)&#10;- Ajout fonction search_value_in_column (fonctionnelle)" />
+    <MESSAGE value="Réglé problème commit" />
+    <MESSAGE value="- Ajout fonction print_col_of_cdt&#10;- Ajout fonction insert_line&#10;- Ajout delete_line&#10;- Ajout fonction delete_col&#10;- Ajout fonction rename_col&#10;- Ajout fonction search_value&#10;- Ajout fonction select_cell" />
+    <MESSAGE value="- Ajout fonctions spécifiques aux colonnes" />
+    <MESSAGE value="- Affichage du CDataframe en fonction d'une colonne triée" />
+    <MESSAGE value="Ajout possibilité d'afficher une seu colonne du CDataframe" />
     <MESSAGE value="Régler problème commit" />
     <option name="LAST_COMMIT_MESSAGE" value="Régler problème commit" />
   </component>

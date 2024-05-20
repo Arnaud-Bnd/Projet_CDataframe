@@ -5,13 +5,16 @@
 #ifndef PROJET_CDATAFRAME_CDATAFRAME_H
 #define PROJET_CDATAFRAME_CDATAFRAME_H
 
+
 #include "column.h"
+
 
 typedef struct {
     char *title;
     int num_columns;
     COLUMN **column;
 } CDATAFRAME;
+
 
 /* Create a CDataframe
  * @param1 : CDataframe title
@@ -46,16 +49,16 @@ void print_lines(CDATAFRAME* cdt, int x, int y);
 
 /* Print columns of the CDataframe
  * @param1 : Pointer to a CDataframe
- * @param2 : number of column limits
+ * @param2 : Starting column number
+ * @param3 : End column number
  */
-void print_col_of_cdt(CDATAFRAME* cdt, int lim);
+void print_col_of_cdt(CDATAFRAME* cdt, int x, int y);
 
 
 /* Insert line in the CDataframe
  * @param1 : Pointer to a CDataframe
- * @return : 1 if the line is added 0 otherwise
  */
-int insert_line(CDATAFRAME* cdt);
+void insert_line(CDATAFRAME* cdt);
 
 
 /* Delete line in the CDataframe
@@ -87,7 +90,7 @@ int delete_col(CDATAFRAME* cdt, int index);
  * @param2 : Number of the column to be change
  * @return : 1 if the column is renamed 0 otherwise
  */
-int rename_col(CDATAFRAME* cdt, int index);
+int rename_col(CDATAFRAME *cdt, int index, char *new_name);
 
 
 /* Search value in the CDataframe
@@ -112,7 +115,7 @@ int select_cell(CDATAFRAME* cdt, int index_l, int index_c);
  * @param2 : Index of the line
  * @param3 : Index of the column
  * @param4 : The value we want
- * @return : Value in the cell
+ * @return : 1 replacement successful otherwise 0
  */
 int replace_cell(CDATAFRAME* cdt, int index_l, int index_c, int value);
 

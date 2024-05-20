@@ -2,8 +2,9 @@
 // Created by Arnaud Bernard on 29/04/2024.
 //
 #include "features.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void swap(int *a, int *b) {
     int temp = *a;
@@ -347,4 +348,117 @@ int display_menu_2() {
     } while (action <= 0 || action > 33);
 
     return action;
+}
+
+
+CDATAFRAME* load_from_csv(char *file_name, int size) {
+    /* Ouverture du fichier en mode lecture */
+    FILE* file = fopen(file_name, "rt");;
+
+    /* Vérifier si le fichier est vide ou non */
+    if (file == NULL) {
+        printf("Ouverture du fichier impossible.\n");
+        return NULL;
+    }
+
+
+    char ligne[150];
+    char *ptr_chaine;
+
+    if (fgets(ligne, 150, file) == NULL) {
+        printf("Erreur lors de la lecture du fichier.\n");
+
+        /* Fermeture du fichier */
+        fclose(file);
+        return NULL;
+    }
+
+    /* Création du CDataframe */
+    CDATAFRAME *cdt = create_cdataframe("Loaded CDataframe");
+
+    /* Enlever les caractères en fin de ligne */
+    ligne[strcspn(ligne, "\n")] = 0;
+
+    /* Créer les colonnes à partir des noms et les insérer dans le CDataframe */
+    /* Création d'un token */
+    ptr_chaine = strtok(ligne, ";");
+    while (ptr_chaine != NULL) {
+        //printf("%s\n", ptr_chaine);
+        /* Création de la colonne à partir du nom */
+        COLUMN *new_col = create_column(ptr_chaine);
+        /* Insérer la colonne dans le CDataframe */
+        insert_column(cdt, new_col);
+        /* Mettre le token à NULL */
+        ptr_chaine = strtok(NULL, ";");
+    }
+
+    /* Parcours de chaque ligne */
+    while (fgets(ligne, 150, file) != NULL) {
+        /* Considérer les \n comme nul, donc 0 */
+        ligne[strcspn(ligne, "\n")] = 0;
+
+        /* Indique la colonne dans laquelle on se trouve */
+        int col_idx = 0;
+
+        /* Séparation des valeurs */
+        ptr_chaine = strtok(ligne, ";");
+        while (ptr_chaine != NULL) {
+            int value;
+            /* Si la chaine est NULL, alors donner la valeur 0 */
+            if (strcmp(ptr_chaine, "NULL") == 0)
+                value = 0;
+            /* Sinon la convertir en int */
+            else
+                value = atoi(ptr_chaine);
+
+            /* Insertion de la valeur dans la colonne */
+            insert_value(cdt->column[col_idx], value);
+            /* Changement de colonne */
+            col_idx++;
+            ptr_chaine = strtok(NULL, ";");
+        }
+    }
+
+    /* Fermeture du fichier */
+    fclose(file);
+    return cdt;
+}
+
+
+void save_into_csv(CDATAFRAME *cdf, char *file_name) {
+    /* Ouverture du fichier en mode écriture */
+    FILE *file = fopen(file_name, "w");
+
+    /* Vérifier que l'ouverture s'est bien faite */
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier pour écriture.\n");
+        return;
+    }
+
+    /* Écrire les noms des colonnes */
+    for (int i = 0; i < cdf->num_columns; i++) {
+        fprintf(file, "%s", cdf->column[i]->title);
+
+        /* Écrire le séparateur après chaque nom sauf le dernier */
+        if (i < cdf->num_columns - 1) {
+            fprintf(file, ";");
+        }
+    }
+    fprintf(file, "\n");
+
+    /* Écriture des données du CDataframe */
+    for (int i = 0; i < cdf->column[0]->T_Logique; i++) {   // Variation des lignes
+        for (int j = 0; j < cdf->num_columns; j++) {        // Variation des colonnes
+            fprintf(file, "%d", cdf->column[j]->data[i]);
+
+            /* Écrire le séparateur après chaque nom sauf le dernier */
+            if (j < cdf->num_columns - 1) {
+                fprintf(file, ",");
+            }
+        }
+        fprintf(file, "\n");
+    }
+
+    /* Fermeture du fichier */
+    fclose(file);
 }

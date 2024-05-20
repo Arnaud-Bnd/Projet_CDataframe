@@ -11,6 +11,14 @@
 #define ASC 0
 #define DESC 1
 
+/*
+typedef struct {
+    char *ligne;
+    char *ptr_chaine;
+    short int num_ligne;
+    short int data_entier;
+} FILE;*/
+
 /* Sort a column according to a given order
  * @param1 : Pointer to the column to sort
  * @param2 : Sort type (ASC or DESC)
@@ -86,6 +94,22 @@ int display_menu_1();
  * (with column created)
  */
 int display_menu_2();
+
+
+/* Create a CDataframe from csv file
+ * @param1: CSV filename
+ * @param2: Array of types
+ * @param3: Size of array in param2
+ */
+CDATAFRAME* load_from_csv(char *file_name, int size);
+
+
+/* Export into a csv file
+ * @param1: Pointer to the CDataframe
+ * @param2: csv filename where export file, if the file exists,
+ *          it will be overwritten
+ */
+void save_into_csv(CDATAFRAME *cdf, char *file_name);
 
 
 #endif //PROJET_CDATAFRAME_FEATURES_H

@@ -5,30 +5,20 @@
 #include "cdataframe.h"
 #include "features.h"
 
-int main1() {
-    CDATAFRAME *cdt = hard_filling();
-
-    cdt->column[1]->valid_index = -1;
-    sort(cdt->column[1], DESC);
-    print_sort_cdt(cdt, 1);
+int main() {
+    CDATAFRAME *cdt = load_from_csv("/Users/arnaudbernard/Documents/01 - Efrei/Année 1/S2/Algorithmique et structure de données/Projet-CDataframe/data.csv", 20);
+    //printf("%s\n", cdt->column[0]->title);
     print_cdt(cdt);
-    //print_col(cdt->column[1]);
-    //print_col_by_index(cdt->column[1]);
 
+    CDATAFRAME *mycdt = hard_filling();
+    print_cdt(mycdt);
 
-    printf("\n\n");
-    for (int i = 0 ; i < cdt->column[1]->T_Logique ; i++) {
-        for (int j = 0 ; j < cdt->column[1]->T_Logique ; j++) {
-            if (i == cdt->column[1]->index[j]) {
-                //printf("[%llu] : %d\n", cdt->column[1]->index[j] + 1, cdt->column[1]->data[j]);
-            }
-        }
-    }
+    save_into_csv(mycdt, "/Users/arnaudbernard/Documents/01 - Efrei/Année 1/S2/Algorithmique et structure de données/Projet-CDataframe/data2.csv");
     return 0;
 }
 
 
-int main() {
+int main1() {
     /* Création d'un CDataFrame */
     // CDATAFRAME *cdt = create_cdataframe("CDataFrame");
     CDATAFRAME *cdt = hard_filling();
@@ -625,7 +615,7 @@ int main() {
 
                 case 30 : { /* Ne rien faire */
                     /* Arrêter le programme */
-                    return 0;
+                    return 1;
                 }
             }
         }

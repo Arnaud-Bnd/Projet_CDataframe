@@ -5,7 +5,7 @@
 #include "cdataframe.h"
 #include "features.h"
 
-int main() {
+int main2() {
     CDATAFRAME *cdt = load_from_csv("/Users/arnaudbernard/Documents/01 - Efrei/Année 1/S2/Algorithmique et structure de données/Projet-CDataframe/data.csv", 20);
     //printf("%s\n", cdt->column[0]->title);
     print_cdt(cdt);
@@ -18,7 +18,7 @@ int main() {
 }
 
 
-int main1() {
+int main() {
     /* Création d'un CDataFrame */
     // CDATAFRAME *cdt = create_cdataframe("CDataFrame");
     CDATAFRAME *cdt = hard_filling();
@@ -613,7 +613,17 @@ int main1() {
                     break;
                 }
 
-                case 30 : { /* Ne rien faire */
+                case 30 : { /* Charger un fichier data.csv */
+                    cdt = load_from_csv("/Users/arnaudbernard/Documents/01 - Efrei/Année 1/S2/Algorithmique et structure de données/Projet-CDataframe/data.csv", 20);
+                    break;
+                }
+
+                case 31 : { /* Sauvegarder le CDataframe dans un cdataframe.csv */
+                    save_into_csv(cdt, "/Users/arnaudbernard/Documents/01 - Efrei/Année 1/S2/Algorithmique et structure de données/Projet-CDataframe/cdataframe.csv");
+                    break;
+                }
+
+                case 32 : { /* Ne rien faire */
                     /* Arrêter le programme */
                     return 1;
                 }
@@ -1207,7 +1217,17 @@ int main1() {
                     break;
                 }
 
-                case 33 : { /* Ne rien faire */
+                case 33 : { /* Charger un fichier data.csv */
+                    cdt = load_from_csv("/Users/arnaudbernard/Documents/01 - Efrei/Année 1/S2/Algorithmique et structure de données/Projet-CDataframe/data.csv", 20);
+                    break;
+                }
+
+                case 34 : { /* Sauvegarder le CDataframe dans un cdataframe.csv */
+                    save_into_csv(cdt, "/Users/arnaudbernard/Documents/01 - Efrei/Année 1/S2/Algorithmique et structure de données/Projet-CDataframe/cdataframe.csv");
+                    break;
+                }
+
+                case 35 : { /* Ne rien faire */
                     /* Arrêter le programme */
                     return 0;
                 }

@@ -290,13 +290,15 @@ int display_menu_1() {
            "27 - Vérifier si une colonne possède un index\n"
            "28 - Mettre à jour un index\n"
            "29 - Faire une recherche dichotomique\n"
-           "30 - Ne rien faire\n");
+           "30 - Charger un fichier data.csv\n"
+           "31 - Sauvegarder le CDataframe dans un cdataframe.csv\n"
+           "32 - Ne rien faire\n");
     int action;
 
     do {
         printf("Que voulez-vous faire ?\n");
         scanf("%d", &action);
-    } while (action <= 0 || action > 30);
+    } while (action <= 0 || action > 32);
 
     return action;
 }
@@ -339,13 +341,15 @@ int display_menu_2() {
            "30 - Vérifier si une colonne possède un index\n"
            "31 - Mettre à jour un index\n"
            "32 - Faire une recherche dichotomique\n"
-           "33 - Ne rien faire\n");
+           "33 - Charger un fichier data.csv\n"
+           "32 - Sauvegarder le CDataframe dans un cdataframe.csv\n"
+           "34 - Ne rien faire\n");
     int action;
 
     printf("Que voulez-vous faire ?\n");
     do {
         scanf("%d", &action);
-    } while (action <= 0 || action > 33);
+    } while (action <= 0 || action > 34);
 
     return action;
 }
@@ -453,7 +457,7 @@ void save_into_csv(CDATAFRAME *cdf, char *file_name) {
 
             /* Écrire le séparateur après chaque nom sauf le dernier */
             if (j < cdf->num_columns - 1) {
-                fprintf(file, ",");
+                fprintf(file, ";");
             }
         }
         fprintf(file, "\n");

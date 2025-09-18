@@ -6,10 +6,17 @@
 #define PROJET_CDATAFRAME_FEATURES_H
 
 
+#include "SortType.h"
+
 #include "cdataframe.h"
 
-#define ASC 0
-#define DESC 1
+//#define ASC 0
+//#define DESC 1
+
+//typedef enum SortType {
+//    asc = 0,
+//    desc = 1
+//} SortType;
 
 /*
 typedef struct {
@@ -23,7 +30,7 @@ typedef struct {
  * @param1 : Pointer to the column to sort
  * @param2 : Sort type (ASC or DESC)
  */
-void sort(COLUMN *col, int sort_dir);
+void sort(Column *col, SortType sort_dir);
 
 
 /* Quicksort
@@ -44,19 +51,19 @@ int partition(int *tab, int left, int right);
 /* Print a CDataframe content
  * @param1 : Pointer to a CDataframe
  */
-void print_sort_cdt(CDATAFRAME *cdt, int index);
+void printSortCdt(CDataFrame *cdt, int index);
 
 
 /* Display the content of a sorted column
  * @param1 : Pointer to a column
  */
-void print_col_by_index(COLUMN *col);
+void printColByIndex(Column *col);
 
 
 /* Remove the index of a column
  * @param1 : Pointer to a column
  */
-void erase_index(COLUMN *col);
+void eraseIndex(Column *col);
 
 
 /* Check if an index is correct
@@ -65,13 +72,13 @@ void erase_index(COLUMN *col);
              -1 : the index exists but invalid,
               1 : the index is correct
  */
-int check_index(COLUMN *col);
+int checkIndex(Column *col);
 
 
 /* Update the index
  * @param1 : Pointer to a column
  */
-void update_index(COLUMN *col);
+void updateIndex(Column *col);
 
 
 /* Check if a value exist in a column
@@ -81,19 +88,19 @@ void update_index(COLUMN *col);
               0 : value not found
               1 : value found
 */
-int search_value_in_column(COLUMN *col, int val);
+int searchValueInColumn(Column *col, int val);
 
 
 /* Display menu 1
  * (without column created)
  */
-int display_menu_1();
+int displayMenu1();
 
 
 /* Display menu 2
  * (with column created)
  */
-int display_menu_2();
+int displayMenu2();
 
 
 /* Create a CDataframe from csv file
@@ -101,7 +108,7 @@ int display_menu_2();
  * @param2: Array of types
  * @param3: Size of array in param2
  */
-CDATAFRAME* load_from_csv(char *file_name, int size);
+CDataFrame* loadFromCsv(char *file_name, int size);
 
 
 /* Export into a csv file
@@ -109,7 +116,7 @@ CDATAFRAME* load_from_csv(char *file_name, int size);
  * @param2: csv filename where export file, if the file exists,
  *          it will be overwritten
  */
-void save_into_csv(CDATAFRAME *cdf, char *file_name);
+void saveIntoCsv(CDataFrame *cdf, char *file_name);
 
 
-#endif //PROJET_CDATAFRAME_FEATURES_H
+#endif // PROJET_CDATAFRAME_FEATURES_H

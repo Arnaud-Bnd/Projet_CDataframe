@@ -8,30 +8,39 @@
 
 #define REALLOC_SIZE 256
 
+#include "SortType.h"
+
+#include <stdint.h>
 
 typedef struct {
     char *title;
-    int T_Logique;
-    int T_Physique;
-    int *data;
-    unsigned long long *index;
+    int32_t T_Logique; // pourquoi pas uint64_t ????
+    // que veux dire T_ ????
+    int32_t T_Physique;
+    int32_t *data;
+    uint64_t *index;
     // Index valid
     // 0 : no index
     // -1 : invalid index
     // 1 : valid index
-    int valid_index;
+    int32_t mValidIndex;
     // direction de tri : Ascendant ou Descendant
     // 0 : ASC
     // 1 : DESC
-    int sort_dir;
-} COLUMN;
+    SortType mSortDir;
+} Column;
 
 
-/* Create a column
- * @param1 : Column title
- * @return : Pointer to created column
+// exemple de documentation avec doxygen
+/**
+ * @brief Create a column.
+ * * Description détaillée de ce que fait la fonction.
+ * Elle peut s'étendre sur plusieurs lignes.
+ * * @param title Column title.
+ * @param param2 Description du deuxième paramètre.
+ * @return Pointer to created column.
  */
-COLUMN *create_column(char* title);
+Column *createColumn(char* title);
 
 
 /* Add a new value to a column
@@ -39,19 +48,19 @@ COLUMN *create_column(char* title);
  * @param2 : The value to be added
  * @return : 1 if the value is added 0 otherwise
  */
-int insert_value(COLUMN* col, int value);
+int insertValue(Column* col, int value);
 
 
 /* Free allocated memory
  * @param1 : Pointer to a column
  */
-void delete_column(COLUMN *col);
+void deleteColumn(Column *col);
 
 
 /* Print a column content
  * @param1 : Pointer to a column
  */
-void print_col(COLUMN* col);
+void printColumn(Column* col);
 
 
 /* Number of occurrences
@@ -59,7 +68,7 @@ void print_col(COLUMN* col);
  *  @param2 : Value to count
  *  @return : Number of occurrences of the value
  */
-int number_occ(COLUMN* col, int value);
+int numberOcc(Column* col, int value);
 
 
 /* Value at position x
@@ -67,7 +76,7 @@ int number_occ(COLUMN* col, int value);
  * @param2 : Position
  * @return : The value at the position x or 0 if the value doesn't exist
  */
-int val_at_pos(COLUMN* col, int pos);
+int valAtPos(Column* col, int pos);
 
 
 /* Number of value > x
@@ -75,7 +84,7 @@ int val_at_pos(COLUMN* col, int pos);
  * @param2 : X
  * @return : Number of value greater than x
  */
-int greater_than(COLUMN* col, int x);
+int greater_than(Column* col, int x);
 
 
 /* Number of value < x
@@ -83,7 +92,7 @@ int greater_than(COLUMN* col, int x);
  * @param2 : X
  * @return : Number of value less than x
  */
-int less_than(COLUMN* col, int x);
+int lessThan(Column* col, int x);
 
 
 /* Number of value = x
@@ -91,7 +100,7 @@ int less_than(COLUMN* col, int x);
  * @param2 : X
  * @return : Number of value equal to x
  */
-int equal_to(COLUMN* col, int x);
+int equalTo(Column* col, int x);
 
 
-#endif //PROJET_CDATAFRAME_COLUMN_H
+#endif // PROJET_CDATAFRAME_COLUMN_H

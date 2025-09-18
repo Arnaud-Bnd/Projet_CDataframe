@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <inttypes.h>
 
 void swap(int *a, int *b) {
     int temp = *a;
@@ -13,7 +14,7 @@ void swap(int *a, int *b) {
 }
 
 
-void sort(COLUMN *col, int sort_dir) {
+void sort(Column *col, SortType sort_dir) {
     /* Vérification de la taille de la colonne */
     if (col == NULL || col->data == NULL || col->T_Logique <= 1) {
         printf("La colonne est vide ou contient un seul élément.\n");
@@ -23,21 +24,21 @@ void sort(COLUMN *col, int sort_dir) {
     /* Vérifier que la colonne ne soit pas triée */
 
     /* Si la colonne est triée dans l'ordre souhaité*/
-    if (col->valid_index == 1 && col->sort_dir == sort_dir) {
+    if (col->mValidIndex == 1 && col->mSortDir == sort_dir) {
         printf("La colonne est déjà triée.\n");
         return;
     }
 
     /* Si la colonne n'est pas triée dans l'ordre souhaité */
     switch (sort_dir) {
-        case ASC: {
+        case asc: {
             /* Si la colonne n'est pas triée */
-            if (col->valid_index == 0) {
+            if (col->mValidIndex == 0) {
                 quicksort(col->data, 0, col->T_Logique - 1);
             }
 
             /* Si la colonne est partiellement triée */
-            else if (col->valid_index == -1) {
+            else if (col->mValidIndex == -1) {
                 for (int i = 0; i < col->T_Logique - 1; i++) {
                     int max_idx = i;
                     for (int j = i + 1; j < col->T_Logique; j++) {
@@ -56,14 +57,14 @@ void sort(COLUMN *col, int sort_dir) {
             break;
         }
 
-        case DESC: {
+        case desc: {
             /* Si la colonne n'est pas triée */
-            if (col->valid_index == 0) {
+            if (col->mValidIndex == 0) {
                 quicksort(col->data, 0, col->T_Logique - 1);
             }
 
             /* Si la colonne est partiellement triée */
-            else if (col->valid_index == -1) {
+            else if (col->mValidIndex == -1) {
                 for (int i = 0; i < col->T_Logique - 1; i++) {
                     int min_idx = i;
                     for (int j = i + 1; j < col->T_Logique; j++) {
@@ -84,10 +85,10 @@ void sort(COLUMN *col, int sort_dir) {
     }
 
     /* Indiquer que la colonne a été triée */
-    col->valid_index = 1;
+    col->mValidIndex = 1;
 
     /* Indiquer l'ordre du tri de la colonne */
-    col->sort_dir = sort_dir;
+    col->mSortDir = sort_dir;
 }
 
 
@@ -119,49 +120,49 @@ int partition(int *tab, int left, int right) {
 }
 
 
-void print_sort_cdt(CDATAFRAME *cdt, int index){
+void printSortCdt(CDataFrame *cdt, int index){
     /* Vérification de la taille du CDataframe */
     if (cdt == NULL) {
         printf("Le pointeur CDataframe est NULL.\n");
         return;
     }
 
-    if (cdt->column[index]->valid_index != 1) {
+    if (cdt->mColumn[index]->mValidIndex != 1) {
         printf("La colonne n'est pas triée.\n");
         return;
     }
 
     /* Afficher le titre du CDataframe */
-    printf("%s\n", cdt->title);
+    printf("%s\n", cdt->mTitle);
 
     /* Vérification du nombre de colonnes */
-    if (cdt->num_columns == 0) {
+    if (cdt->mNumColumns == 0) {
         printf("Le CDataframe n'a pas de colonnes.\n");
         return;
     }
 
     /* Boucle pour les titres des colonnes */
     printf("\t\t");
-    for (int i = 0 ; i < cdt->num_columns ; i++) {
+    for (int i = 0 ; i < cdt->mNumColumns ; i++) {
         // Afficher le titre de la colonne
-        printf("%s\t\t", (char *) cdt->column[i]->title);
+        printf("%s\t\t", (char *) cdt->mColumn[i]->title);
     }
     printf("\n");
 
     /* Trouver la colonne avec le plus de lignes */
-    int max_rows = number_of_lines(cdt);
+    uint64_t max_rows = (uint64_t)numberOfLines(cdt);
 
     /* Boucle pour les valeurs des colonnes */
-    for (int j = 0 ; j < max_rows ; j++){   // Variation de la ligne
+    for (uint64_t j = 0 ; j < max_rows ; j++){   // Variation de la ligne
         /* Afficher le numéro de la ligne */
-        printf("[%d]\t\t", j + 1);
+        printf("[%" PRIu64 "]\t\t", j + 1);
 
         /* Afficher les valeurs */
-        for (int i = 0 ; i < cdt->num_columns ; i++) {    // Variation de la colonne
-            for (int k = 0 ; i < cdt->num_columns ; k++) {    // Variation de l'index
-                if (j == cdt->column[index]->index[k]) {
+        for (int i = 0 ; i < cdt->mNumColumns ; i++) {    // Variation de la colonne
+            for (int k = 0 ; i < cdt->mNumColumns ; k++) {    // Variation de l'index
+                if (j == cdt->mColumn[index]->index[k]) {
                     // Afficher la valeur
-                    printf("%d\t\t\t\t", cdt->column[i]->data[k]);
+                    printf("%d\t\t\t\t", cdt->mColumn[i]->data[k]);
                     break;
                 }
             }
@@ -172,23 +173,23 @@ void print_sort_cdt(CDATAFRAME *cdt, int index){
 }
 
 
-void print_col_by_index(COLUMN *col) {
+void printColByIndex(Column *col) {
     /* Vérification du pointeur colonne */
     if (col == NULL) {
         printf("Le pointeur colonne est NULL.\n");
         return;
     }
 
-    if (col->valid_index != 1) {
+    if (col->mValidIndex != 1) {
         printf("La colonne n'est pas triée.\n");
         return;
     }
 
     /* Afficher les données de la colonne triée */
-    for (int i = 0 ; i < col->T_Logique ; i++) {
+    for (uint64_t i = 0 ; i < (uint64_t)col->T_Logique ; i++) {
         for (int j = 0 ; j < col->T_Logique ; j++) {
             if (i == col->index[j]) {
-                printf("[%llu] : %d\n", col->index[j] + 1, col->data[j]);
+                printf("[%" PRIu64 "] : %" PRId32 "\n", col->index[j] + 1, col->data[j]);
             }
         }
     }
@@ -196,29 +197,29 @@ void print_col_by_index(COLUMN *col) {
 }
 
 
-void erase_index(COLUMN *col) {
+void eraseIndex(Column *col) {
     /* Libérer la mémoire allouée pour l'index */
     free(col->index);
     col->index = NULL;
 
     /* Mise à jour de l'attribut valid_index */
-    col->valid_index = 0;
+    col->mValidIndex = 0;
 }
 
 
-int check_index(COLUMN *col) {
-    return col->valid_index;
+int checkIndex(Column *col) {
+    return col->mValidIndex;
 }
 
 
-void update_index(COLUMN *col) {
-    sort(col, DESC);
+void updateIndex(Column *col) {
+    sort(col, desc);
 }
 
 
-int search_value_in_column(COLUMN *col, int val) {
+int searchValueInColumn(Column *col, int val) {
     /* Vérification du tri de la colonne */
-    if (col->valid_index == -1 || col->valid_index == 0){
+    if (col->mValidIndex == -1 || col->mValidIndex == 0){
         printf("La colonne n'est pas triée.\n");
         return -2;
     }
@@ -227,7 +228,7 @@ int search_value_in_column(COLUMN *col, int val) {
     int m, g = 0, d = col->T_Logique - 1;
 
     /* Recherche dichotomique par ordre croissant*/
-    if (col->sort_dir == ASC) {
+    if (col->mSortDir == asc) {
         while (g <= d) {
             m = (g + d) / 2;
             if (val == col->data[m]) {
@@ -256,7 +257,7 @@ int search_value_in_column(COLUMN *col, int val) {
 }
 
 
-int display_menu_1() {
+int displayMenu1() {
     printf("\n========== Menu ==========\n"
            "Attention !!! :\n"
            "- Toutes les actions sur des colonnes effectuer sur des colonnes intégrées au CDataFrame\n"
@@ -304,7 +305,7 @@ int display_menu_1() {
 }
 
 
-int display_menu_2() {
+int displayMenu2() {
     printf("\n\n========== Menu ==========\n"
            "Attention !!! :\n"
            "- Si vous souhaitez créer une autre colonne, supprimez la colonne déjà\n"
@@ -355,20 +356,17 @@ int display_menu_2() {
 }
 
 
-CDATAFRAME* load_from_csv(char *file_name, int size) {
+CDataFrame* loadFromCsv(char *file_name, int /*size*/) {
     /* Ouverture du fichier en mode lecture */
     FILE* file = fopen(file_name, "rt");;
 
     /* Vérifier si le fichier est vide ou non */
-    if (file == NULL) {
+    if (!file) {
         printf("Ouverture du fichier impossible.\n");
         return NULL;
     }
 
-
-    char ligne[150];
-    char *ptr_chaine;
-
+    char ligne[150]; // ??? la ligne est-elle assez grande ????
     if (fgets(ligne, 150, file) == NULL) {
         printf("Erreur lors de la lecture du fichier.\n");
 
@@ -378,20 +376,20 @@ CDATAFRAME* load_from_csv(char *file_name, int size) {
     }
 
     /* Création du CDataframe */
-    CDATAFRAME *cdt = create_cdataframe("Loaded CDataframe");
+    CDataFrame *cdt = createCDataFrame("Loaded CDataframe");
 
     /* Enlever les caractères en fin de ligne */
     ligne[strcspn(ligne, "\n")] = 0;
 
     /* Créer les colonnes à partir des noms et les insérer dans le CDataframe */
     /* Création d'un token */
-    ptr_chaine = strtok(ligne, ";");
-    while (ptr_chaine != NULL) {
+    char *ptr_chaine = strtok(ligne, ";");
+    while (ptr_chaine) {
         //printf("%s\n", ptr_chaine);
         /* Création de la colonne à partir du nom */
-        COLUMN *new_col = create_column(ptr_chaine);
+        Column *new_col = createColumn(ptr_chaine);
         /* Insérer la colonne dans le CDataframe */
-        insert_column(cdt, new_col);
+        insertColumn(cdt, new_col);
         /* Mettre le token à NULL */
         ptr_chaine = strtok(NULL, ";");
     }
@@ -406,17 +404,17 @@ CDATAFRAME* load_from_csv(char *file_name, int size) {
 
         /* Séparation des valeurs */
         ptr_chaine = strtok(ligne, ";");
-        while (ptr_chaine != NULL) {
+        while (ptr_chaine) {
             int value;
             /* Si la chaine est NULL, alors donner la valeur 0 */
-            if (strcmp(ptr_chaine, "NULL") == 0)
+            if (0 == strcmp(ptr_chaine, "NULL"))
                 value = 0;
             /* Sinon la convertir en int */
             else
                 value = atoi(ptr_chaine);
 
             /* Insertion de la valeur dans la colonne */
-            insert_value(cdt->column[col_idx], value);
+            insertValue(cdt->mColumn[col_idx], value);
             /* Changement de colonne */
             col_idx++;
             ptr_chaine = strtok(NULL, ";");
@@ -429,34 +427,33 @@ CDATAFRAME* load_from_csv(char *file_name, int size) {
 }
 
 
-void save_into_csv(CDATAFRAME *cdf, char *file_name) {
+void saveIntoCsv(CDataFrame *cdf, char *file_name) {
     /* Ouverture du fichier en mode écriture */
     FILE *file = fopen(file_name, "w");
-
     /* Vérifier que l'ouverture s'est bien faite */
-    if (file == NULL) {
+    if (!file) {
         printf("Erreur lors de l'ouverture du fichier pour écriture.\n");
         return;
     }
 
     /* Écrire les noms des colonnes */
-    for (int i = 0; i < cdf->num_columns; i++) {
-        fprintf(file, "%s", cdf->column[i]->title);
+    for (int i = 0; i < cdf->mNumColumns; i++) {
+        fprintf(file, "%s", cdf->mColumn[i]->title);
 
         /* Écrire le séparateur après chaque nom sauf le dernier */
-        if (i < cdf->num_columns - 1) {
+        if (i < cdf->mNumColumns - 1) {
             fprintf(file, ";");
         }
     }
     fprintf(file, "\n");
 
     /* Écriture des données du CDataframe */
-    for (int i = 0; i < cdf->column[0]->T_Logique; i++) {   // Variation des lignes
-        for (int j = 0; j < cdf->num_columns; j++) {        // Variation des colonnes
-            fprintf(file, "%d", cdf->column[j]->data[i]);
+    for (int i = 0; i < cdf->mColumn[0]->T_Logique; i++) {   // Variation des lignes
+        for (int j = 0; j < cdf->mNumColumns; j++) {        // Variation des colonnes
+            fprintf(file, "%d", cdf->mColumn[j]->data[i]);
 
             /* Écrire le séparateur après chaque nom sauf le dernier */
-            if (j < cdf->num_columns - 1) {
+            if (j < cdf->mNumColumns - 1) {
                 fprintf(file, ";");
             }
         }

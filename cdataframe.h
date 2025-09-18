@@ -10,33 +10,33 @@
 
 
 typedef struct {
-    char *title;
-    int num_columns;
-    COLUMN **column;
-} CDATAFRAME;
+    char *mTitle;
+    int mNumColumns;
+    Column **mColumn;
+} CDataFrame;
 
 
 /* Create a CDataframe
  * @param1 : CDataframe title
  * @return : Pointer to created column
  */
-CDATAFRAME *create_cdataframe(char* title);
+CDataFrame *createCDataFrame(char* title);
 
 
 /* Insert user input in a CDataframe
  * @param1 : Pointer to a CDataframe
  */
-void user_input(CDATAFRAME* cdt);
+void userInput(CDataFrame* cdt);
 
 
 /* Hard filling of CDataframe */
-CDATAFRAME *hard_filling();
+CDataFrame *hardFilling();
 
 
 /* Print a CDataframe content
  * @param1 : Pointer to a CDataframe
  */
-void print_cdt(CDATAFRAME* cdt);
+void printCdt(CDataFrame* cdt);
 
 
 /* Print lines of the CDataframe
@@ -44,7 +44,7 @@ void print_cdt(CDATAFRAME* cdt);
  * @param2 : Starting line number
  * @param3 : End line number
  */
-void print_lines(CDATAFRAME* cdt, int x, int y);
+void printLines(CDataFrame* cdt, int x, int y);
 
 
 /* Print columns of the CDataframe
@@ -52,13 +52,13 @@ void print_lines(CDATAFRAME* cdt, int x, int y);
  * @param2 : Starting column number
  * @param3 : End column number
  */
-void print_col_of_cdt(CDATAFRAME* cdt, int x, int y);
+void printColOfCdt(CDataFrame* cdt, int x, int y);
 
 
 /* Insert line in the CDataframe
  * @param1 : Pointer to a CDataframe
  */
-void insert_line(CDATAFRAME* cdt);
+void insertLine(CDataFrame* cdt);
 
 
 /* Delete line in the CDataframe
@@ -66,7 +66,7 @@ void insert_line(CDATAFRAME* cdt);
  * @param2 : Number of the line to be deleted
  * @return : 1 if the line is deleted 0 otherwise
  */
-int delete_line(CDATAFRAME* cdt, int index);
+int deleteLine(CDataFrame* cdt, int index);
 
 
 /* Add a new column to a CDataframe
@@ -74,7 +74,7 @@ int delete_line(CDATAFRAME* cdt, int index);
  * @param2 : Pointer to a column to be added
  * @return : 1 if the column is added 0 otherwise
  */
-int insert_column(CDATAFRAME* cdt, COLUMN* column);
+int insertColumn(CDataFrame* cdt, Column* column);
 
 
 /* Delete column in the CDataframe
@@ -82,7 +82,7 @@ int insert_column(CDATAFRAME* cdt, COLUMN* column);
  * @param2 : Number of the column to be deleted
  * @return : 1 if the column is deleted 0 otherwise
  */
-int delete_col(CDATAFRAME* cdt, int index);
+int deleteCol(CDataFrame* cdt, int index);
 
 
 /* Rename a CDataframe column title
@@ -90,7 +90,7 @@ int delete_col(CDATAFRAME* cdt, int index);
  * @param2 : Number of the column to be change
  * @return : 1 if the column is renamed 0 otherwise
  */
-int rename_col(CDATAFRAME *cdt, int index, char *new_name);
+int renameCol(CDataFrame *cdt, int index, char *new_name);
 
 
 /* Search value in the CDataframe
@@ -98,7 +98,7 @@ int rename_col(CDATAFRAME *cdt, int index, char *new_name);
  * @param2 : Value we search
  * @return : Number of times the value appears
  */
-int search_value(CDATAFRAME* cdt, int value);
+int searchValue(CDataFrame* cdt, int value);
 
 
 /* Select a cell
@@ -107,7 +107,7 @@ int search_value(CDATAFRAME* cdt, int value);
  * @param3 : Index of the column
  * @return : Value in the cell
  */
-int select_cell(CDATAFRAME* cdt, int index_l, int index_c);
+int selectCell(CDataFrame* cdt, int index_l, int index_c);
 
 
 /* Replace a cell
@@ -117,27 +117,27 @@ int select_cell(CDATAFRAME* cdt, int index_l, int index_c);
  * @param4 : The value we want
  * @return : 1 replacement successful otherwise 0
  */
-int replace_cell(CDATAFRAME* cdt, int index_l, int index_c, int value);
+int replaceCell(CDataFrame* cdt, int index_l, int index_c, int value);
 
 
 /* Print names of columns
  * @param1 : Pointer to a CDataframe
  */
-void print_name_col(CDATAFRAME* cdt);
+void printNameCol(CDataFrame* cdt);
 
 
 /* Number of lines
  * @param1 : Pointer to a CDataframe
  * @return : Number of lines in the CDataframe
  */
-int number_of_lines(CDATAFRAME* cdt);
+int numberOfLines(CDataFrame* cdt);
 
 
 /* Number of columns
  * @param1 : Pointer to a CDataframe
  * @return : Number of columns in the CDataframe
  */
-int number_of_cols(CDATAFRAME* cdt);
+int numberOfCols(CDataFrame* cdt);
 
 
 /* Number of cells equal to x
@@ -145,14 +145,14 @@ int number_of_cols(CDATAFRAME* cdt);
  * @param2 : X
  * @return : Number of cells equal to x
  */
-int cell_equal_to(CDATAFRAME* cdt, int x);
+int cellEqualTo(CDataFrame* cdt, int x);
 
 /* Number of cells greater than x
  * @param1 : Pointer to a CDataframe
  * @param2 : X
  * @return : Number of cells greater than x
  */
-int cell_greater_than(CDATAFRAME* cdt, int x);
+int cellGreaterThan(CDataFrame* cdt, int x);
 
 
 /* Number of cells less than x
@@ -160,7 +160,7 @@ int cell_greater_than(CDATAFRAME* cdt, int x);
  * @param2 : X
  * @return : Number of cells less than x
  */
-int cell_less_than(CDATAFRAME* cdt, int x);
+int cellLessThan(CDataFrame* cdt, int x);
 
 
-#endif //PROJET_CDATAFRAME_CDATAFRAME_H
+#endif // PROJET_CDATAFRAME_CDATAFRAME_H

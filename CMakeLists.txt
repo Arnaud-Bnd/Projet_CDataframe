@@ -13,8 +13,29 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# --- Configuration Doxygen ---
+find_package(Doxygen)
+
+if (DOXYGEN_FOUND)
+    # Configurer le Doxyfile à partir du modèle
+    configure_file(Doxyfile.in Doxyfile @ONLY)
+
+    # Créer la cible de documentation
+    add_custom_target(doc
+        COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Génération de la documentation avec Doxygen"
+    )
+
+    # Rendre la documentation dépendante de la compilation (optionnel)
+    # add_dependencies(my_app doc)
+endif()
+
 # Exécutable principal
 add_executable(Projet_CDataframe 
+    Errors.h
+    Errors.c
+    SortType.h
     main.c
     column.c
     column.h
@@ -30,7 +51,8 @@ add_executable(Projet_CDataframe
 
 # Options de compilation recommandées
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-    target_compile_options(Projet_CDataframe PRIVATE -Wall -Wextra -Werror)
+    target_compile_options(Projet_CDataframe PRIVATE -Wall -Wextra -Werror -O3)
+    #target_compile_options(Projet_CDataframe PRIVATE -Wall -Wextra -O3)
 endif()
 
 # Définir des macros pour la compatibilité C/C++

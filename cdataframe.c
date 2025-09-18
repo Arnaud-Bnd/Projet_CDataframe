@@ -2,29 +2,28 @@
 // Created by Arnaud Bernard on 20/04/2024.
 //
 #include "cdataframe.h"
+#include "Errors.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-
-
 #include <string.h>
 
 
-CDATAFRAME *create_cdataframe(char* title) {
-    CDATAFRAME *cdataframe = (CDATAFRAME *) malloc(sizeof (CDATAFRAME));
-    cdataframe->title = title;
-    cdataframe->num_columns = 0;
-    cdataframe->column = NULL;
+CDataFrame *createCDataFrame(char* title) {
+    CDataFrame *cdataframe = (CDataFrame *) malloc(sizeof (CDataFrame));
+    cdataframe->mTitle = title;
+    cdataframe->mNumColumns = 0;
+    cdataframe->mColumn = NULL;
 
     return cdataframe;
 }
 
-
-void user_input(CDATAFRAME* cdt) {
-    /* Vérification de la taille du CDataframe */
-    if (cdt == NULL) {
-        printf("Le pointeur CDataframe est NULL.\n");
-        return;
-    }
+void userInput(CDataFrame* cdt) {
+//    if (!cdt) {
+//        printf("Le pointeur CDataframe est NULL.\n");
+//        return;
+//    }
+    POINTER_CHECK_AND_RETURN(cdt, "Le pointeur CDataframe\n");
 
     /* Initialisation de la variable qui vérifie les insertions */
     int verif;
@@ -45,7 +44,7 @@ void user_input(CDATAFRAME* cdt) {
         scanf("%s", name_col);
 
         // Création de la colonne portant le nom
-        COLUMN *new_col = create_column(name_col);
+        Column *new_col = createColumn(name_col);
 
         // Saisie du nombre de valeurs qu'il veut rentrer
         int nbr_value;
@@ -64,7 +63,7 @@ void user_input(CDATAFRAME* cdt) {
 
             // Insertion de la valeur
             do {
-                verif = insert_value(new_col, value);
+                verif = insertValue(new_col, value);
             } while (verif == 0);
 
             printf("\n");
@@ -72,64 +71,63 @@ void user_input(CDATAFRAME* cdt) {
 
         // Insertion de la colonne
         do {
-            verif = insert_column(cdt, new_col);
+            verif = insertColumn(cdt, new_col);
         } while (verif == 0);
     }
 }
 
 
-CDATAFRAME *hard_filling(){
-    // Création d'un CDataframe
-    CDATAFRAME *cdt = create_cdataframe("Hard Filling Dataframe");
+CDataFrame *hardFilling(){
+    CDataFrame *cdt = createCDataFrame("Hard Filling Dataframe");
 
-    COLUMN *col1 = create_column("Colonne-1");
-    insert_value(col1, 1);
-    insert_value(col1, 2);
-    insert_value(col1, 3);
-    insert_column(cdt, col1);
+    Column *col1 = createColumn("Colonne-1");
+    insertValue(col1, 1);
+    insertValue(col1, 2);
+    insertValue(col1, 3);
+    insertColumn(cdt, col1);
 
-    COLUMN *col2 = create_column("Colonne-2");
-    insert_value(col2, 4);
-    insert_value(col2, 5);
-    insert_value(col2, 6);
-    insert_column(cdt, col2);
+    Column *col2 = createColumn("Colonne-2");
+    insertValue(col2, 4);
+    insertValue(col2, 5);
+    insertValue(col2, 6);
+    insertColumn(cdt, col2);
 
-    COLUMN *col3 = create_column("Colonne-3");
-    insert_value(col3, 7);
-    insert_value(col3, 8);
-    insert_value(col3, 9);
-    insert_column(cdt, col3);
+    Column *col3 = createColumn("Colonne-3");
+    insertValue(col3, 7);
+    insertValue(col3, 8);
+    insertValue(col3, 9);
+    insertColumn(cdt, col3);
 
     return cdt;
 }
 
+void printCdt(CDataFrame *cdt){
+//    if (!cdt) {
+//        printf("Le pointeur CDataframe est NULL.\n");
+//        return;
+//    }
+    POINTER_CHECK_AND_RETURN(cdt, "ctd, type CDataframe\n");
 
-void print_cdt(CDATAFRAME *cdt){
-    /* Vérification de la taille du CDataframe */
-    if (cdt == NULL) {
-        printf("Le pointeur CDataframe est NULL.\n");
-        return;
-    }
 
     /* Afficher le titre du CDataframe */
-    printf("%s\n", cdt->title);
+    printf("%s\n", cdt->mTitle);
 
     /* Vérification du nombre de colonnes */
-    if (cdt->num_columns == 0) {
+    if (cdt->mNumColumns == 0) {
         printf("Le CDataframe n'a pas de colonnes.\n");
         return;
     }
 
     /* Boucle pour les titres des colonnes */
     printf("\t\t");
-    for (int i = 0 ; i < cdt->num_columns ; i++) {
+    for (int i = 0 ; i < cdt->mNumColumns ; i++) {
         // Afficher le titre de la colonne
-        printf("%s\t\t", (char *) cdt->column[i]->title);
+        printf("%s\t\t", (char *) cdt->mColumn[i]->title);
     }
     printf("\n");
 
     /* Trouver la colonne avec le plus de lignes */
-    int max_rows = number_of_lines(cdt);
+    int max_rows = numberOfLines(cdt);
 
     /* Boucle pour les valeurs des colonnes */
     for (int j = 0 ; j < max_rows ; j++){   // Variation de la ligne
@@ -137,9 +135,9 @@ void print_cdt(CDATAFRAME *cdt){
         printf("[%d]\t\t", j + 1);
 
         /* Afficher les valeurs */
-        for (int i = 0 ; i < cdt->num_columns ; i++) {    // Variation de la colonne
+        for (int i = 0 ; i < cdt->mNumColumns ; i++) {    // Variation de la colonne
                 // Afficher la valeur
-                printf("%d\t\t\t\t", cdt->column[i]->data[j]);
+                printf("%d\t\t\t\t", cdt->mColumn[i]->data[j]);
         }
         printf("\n"); // Passage à la ligne suivante
     }
@@ -147,20 +145,20 @@ void print_cdt(CDATAFRAME *cdt){
 }
 
 
-void print_lines(CDATAFRAME *cdt, int x, int y){
+void printLines(CDataFrame *cdt, int x, int y){
     /* Afficher le titre du CDataframe */
-    printf("%s\n", (char *) cdt->title);
+    printf("%s\n", (char *) cdt->mTitle);
 
     /* Vérification du nombre de colonnes */
-    if (cdt->num_columns == 0) {
+    if (cdt->mNumColumns == 0) {
         printf("Le CDataframe n'a pas de colonnes.\n");
         return;
     }
 
     /* Boucle pour les titres des colonnes */
-    for (int i = 0 ; i < cdt->num_columns ; i++) {
+    for (int i = 0 ; i < cdt->mNumColumns ; i++) {
         // Afficher le titre de la colonne
-        printf("\t\t%s", cdt->column[i]->title);
+        printf("\t\t%s", cdt->mColumn[i]->title);
     }
     printf("\n");
 
@@ -170,9 +168,9 @@ void print_lines(CDATAFRAME *cdt, int x, int y){
         printf("[%d]\t\t", j + 1);
 
         /* Afficher les valeurs */
-        for (int i = 0; i < cdt->num_columns; i++) {    // Variation de la colonne
+        for (int i = 0; i < cdt->mNumColumns; i++) {    // Variation de la colonne
             // Afficher la valeur
-            printf("%d\t\t\t\t", cdt->column[i]->data[j]);
+            printf("%d\t\t\t\t", cdt->mColumn[i]->data[j]);
         }
         printf("\n"); // Passage à la ligne suivante
     }
@@ -180,12 +178,12 @@ void print_lines(CDATAFRAME *cdt, int x, int y){
 }
 
 
-void print_col_of_cdt(CDATAFRAME* cdt, int x, int y) {
+void printColOfCdt(CDataFrame* cdt, int x, int y) {
     /* Afficher le titre du CDataframe */
-    printf("%s\n", (char *) cdt->title);
+    printf("%s\n", (char *) cdt->mTitle);
 
     /* Vérification du nombre de colonnes */
-    if (cdt->num_columns == 0) {
+    if (cdt->mNumColumns == 0) {
         printf("Le CDataframe n'a pas de colonnes.\n");
         return;
     }
@@ -193,19 +191,19 @@ void print_col_of_cdt(CDATAFRAME* cdt, int x, int y) {
     /* Boucle pour les titres des colonnes */
     for (int i = x ; i <= y ; i++) {
         // Afficher le titre de la colonne
-        printf("\t\t%s", cdt->column[i]->title);
+        printf("\t\t%s", cdt->mColumn[i]->title);
     }
     printf("\n");
 
     /* Boucle pour les valeurs des colonnes */
-    for (int j = 0 ; j < number_of_lines(cdt) ; j++){ // Variation de la ligne
+    for (int j = 0 ; j < numberOfLines(cdt) ; j++){ // Variation de la ligne
         /* Afficher le numéro de la ligne */
         printf("[%d]\t\t", j + 1);
 
         /* Afficher les valeurs */
         for (int i = x ; i <= y ; i++) {    // Variation de la colonne
             // Afficher la valeur
-            printf("%d\t\t\t\t", cdt->column[i]->data[j]);
+            printf("%d\t\t\t\t", cdt->mColumn[i]->data[j]);
         }
         printf("\n"); // Passage à la ligne suivante
     }
@@ -213,51 +211,49 @@ void print_col_of_cdt(CDATAFRAME* cdt, int x, int y) {
 }
 
 
-void insert_line(CDATAFRAME* cdt) {
-    for (int i = 0 ; i < cdt->num_columns ; i++){
+void insertLine(CDataFrame* cdt) {
+    for (int i = 0 ; i < cdt->mNumColumns ; i++){
         int val;
 
-        printf("Saisir la valeur de la colonne '%s' : \n", cdt->column[i]->title);
+        printf("Saisir la valeur de la colonne '%s' : \n", cdt->mColumn[i]->title);
         scanf("%d", &val);
 
-        insert_value(cdt->column[i], val);
+        insertValue(cdt->mColumn[i], val);
     }
 }
 
 
-int delete_line(CDATAFRAME* cdt, int index) {
-    /* Vérification de la taille du CDataframe et de la colonne*/
-    if (cdt == NULL) {
+int deleteLine(CDataFrame* cdt, int index) {
+    if (!cdt) {
         printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
-    for (int i = 0 ; i < cdt->num_columns ; i++) {
+    for (int i = 0 ; i < cdt->mNumColumns ; i++) {
         /* Décaler les autres lignes */
-        if (index != number_of_lines(cdt) - 1) {
-            for (int j = index; j < cdt->column[i]->T_Logique - 1; j++) {
-                cdt->column[i]->data[j] = cdt->column[i]->data[j + 1];
+        if (index != numberOfLines(cdt) - 1) {
+            for (int j = index; j < cdt->mColumn[i]->T_Logique - 1; j++) {
+                cdt->mColumn[i]->data[j] = cdt->mColumn[i]->data[j + 1];
             }
         }
 
-        cdt->column[i]->data = realloc(cdt->column[i]->data, --(cdt->column[i]->T_Logique) * sizeof (int));
+        cdt->mColumn[i]->data = realloc(cdt->mColumn[i]->data, --(cdt->mColumn[i]->T_Logique) * sizeof (int));
     }
 
     return 1;
 }
 
 
-int insert_column(CDATAFRAME* cdt, COLUMN* column) {
-    /* Vérification de la taille du CDataframe et de la colonne */
-    if (cdt == NULL || column == NULL) {
+int insertColumn(CDataFrame* cdt, Column* column) {
+    if (!cdt || !column) {
         printf("Le pointeur CDataframe ou colonne est NULL.\n");
         return 0;
     }
 
     /* Si la colonne n'a pas encore été utilisée, faire une allocation */
-    if (cdt->column == NULL) {
-        cdt->column = (COLUMN **) malloc(sizeof (COLUMN *));
-        if (cdt->column == NULL) {
+    if (!cdt->mColumn) {
+        cdt->mColumn = (Column **) malloc(sizeof (Column *));
+        if (!cdt->mColumn) {
             printf("Échec de la réallocation de la mémoire.\n");
             return 0;
         }
@@ -265,7 +261,7 @@ int insert_column(CDATAFRAME* cdt, COLUMN* column) {
 
     /* Sinon faire une réallocation (toujours à la bonne taille) */
     else {
-        cdt->column = realloc(cdt->column, (cdt->num_columns + 1) * sizeof (COLUMN *));
+        cdt->mColumn = realloc(cdt->mColumn, (cdt->mNumColumns + 1) * sizeof (Column *));
     }
 
     // Dupliquer le titre de la colonne avant de l'insérer
@@ -274,54 +270,53 @@ int insert_column(CDATAFRAME* cdt, COLUMN* column) {
     column->title = col_title;
 
     // Insertion de la colonne dans le CDataframe
-    cdt->column[cdt->num_columns++] = column;
+    cdt->mColumn[cdt->mNumColumns++] = column;
 
     return 1;
 }
 
 
-int delete_col(CDATAFRAME * cdt, int index) {
+int deleteCol(CDataFrame * cdt, int index) {
     /* Vérification de la taille du CDataframe et de la colonne */
-    if (cdt == NULL || cdt->column[index] == NULL) {
+    if (!cdt || !cdt->mColumn[index]) {
         printf("Le pointeur CDataframe ou colonne est NULL.\n");
         return 0;
     }
 
     // Libérer la mémoire allouée pour le titre de la colonne
-    free(cdt->column[index]->title);
-    cdt->column[index]->title = NULL;
+    free(cdt->mColumn[index]->title);
+    cdt->mColumn[index]->title = NULL;
 
 
     // Libérer le tableau de pointeurs vers les lignes
-    free(cdt->column[index]->data);
-    cdt->column[index]->data = NULL;
+    free(cdt->mColumn[index]->data);
+    cdt->mColumn[index]->data = NULL;
 
     // Réinitialiser la taille logique de la colonne
-    cdt->column[index]->T_Logique = 0;
+    cdt->mColumn[index]->T_Logique = 0;
 
     // Réinitialiser la taille physique de la colonne
-    cdt->column[index]->T_Physique = 0;
+    cdt->mColumn[index]->T_Physique = 0;
 
     /* Réallocation de la taille du CDataframe */
-    if (index == cdt->num_columns - 1) {
-        cdt->column = realloc(cdt->column, --(cdt->num_columns) * sizeof (COLUMN *));
+    if (index == cdt->mNumColumns - 1) {
+        cdt->mColumn = realloc(cdt->mColumn, --(cdt->mNumColumns) * sizeof (Column *));
     }
-    else if (index < cdt->num_columns - 1) {
+    else if (index < cdt->mNumColumns - 1) {
         /* Décalage des autres colonnes */
-        for (int i = index ; i < cdt->num_columns - 1 ; i++) {
-            cdt->column[i] = cdt->column[i + 1];
+        for (int i = index ; i < cdt->mNumColumns - 1 ; i++) {
+            cdt->mColumn[i] = cdt->mColumn[i + 1];
         }
 
-        cdt->column = realloc(cdt->column, --(cdt->num_columns) * sizeof (COLUMN *));
+        cdt->mColumn = realloc(cdt->mColumn, --(cdt->mNumColumns) * sizeof (Column *));
     }
 
     return 1;
 }
 
 
-int rename_col(CDATAFRAME *cdt, int index, char *new_name) {
-    /* Vérification de la taille du CDataframe et de la colonne */
-    if (cdt == NULL || cdt->column[index] == NULL) {
+int renameCol(CDataFrame *cdt, int index, char *new_name) {
+    if (!cdt || !cdt->mColumn[index]) {
         printf("Le pointeur CDataframe ou colonne est NULL.\n");
         return 0;
     }
@@ -331,108 +326,103 @@ int rename_col(CDATAFRAME *cdt, int index, char *new_name) {
     strcpy(col_title, new_name);
     new_name = col_title;
 
-    cdt->column[index]->title = new_name;
+    cdt->mColumn[index]->title = new_name;
     return 1;
 }
 
 
-int search_value(CDATAFRAME* cdt, int value) {
+int searchValue(CDataFrame* cdt, int value) {
     int cpt = 0;
 
     /* Boucle pour parcourir les colonnes */
-    for (int i = 0 ; i < cdt->num_columns ; i++) {
+    for (int i = 0 ; i < cdt->mNumColumns ; i++) {
         /* Boucle pour parcourir les lignes */
-        cpt += number_occ(cdt->column[i], value);
+        cpt += numberOcc(cdt->mColumn[i], value);
     }
 
     return cpt;
 }
 
 
-int select_cell(CDATAFRAME* cdt, int index_l, int index_c) {
-    return cdt->column[index_c]->data[index_l];
+int selectCell(CDataFrame* cdt, int index_l, int index_c) {
+    return cdt->mColumn[index_c]->data[index_l];
 }
 
 
-int replace_cell(CDATAFRAME* cdt, int index_l, int index_c, int value) {
-    /* Vérification de la taille du CDataframe */
-    if (cdt == NULL) {
+int replaceCell(CDataFrame* cdt, int index_l, int index_c, int value) {
+    if (!cdt) {
         printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
     /* Si la case n'existe pas retourner 0 */
-    if (index_c < 0 || index_c >= cdt->num_columns || index_l < 0 || index_l >= number_of_lines(cdt)) {
+    if (index_c < 0 || index_c >= cdt->mNumColumns || index_l < 0 || index_l >= numberOfLines(cdt)) {
         printf("Cette cellule n'existe pas.\n");
         return 0;
     }
     /* Sinon remplacer la valeur et retourner 1 */
-    cdt->column[index_c]->data[index_l] = value;
+    cdt->mColumn[index_c]->data[index_l] = value;
 
     return 1;
 }
 
 
-void print_name_col(CDATAFRAME *cdt) {
-    /* Vérification de la taille du CDataframe */
-    if (cdt == NULL) {
+void printNameCol(CDataFrame *cdt) {
+    if (!cdt) {
         printf("Le pointeur CDataframe est NULL.\n");
         return;
     }
 
     /* Boucle pour les titres des colonnes */
-    for (int i = 0 ; i < cdt->num_columns ; i++) {
+    for (int i = 0 ; i < cdt->mNumColumns ; i++) {
         // Afficher le titre de la colonne
-        printf("%s\t\t", cdt->column[i]->title);
+        printf("%s\t\t", cdt->mColumn[i]->title);
     }
     printf("\n\n");
 }
 
 
-int number_of_lines(CDATAFRAME *cdt) {
-    /* Vérification de la taille du CDataframe */
-    if (cdt == NULL) {
+int numberOfLines(CDataFrame *cdt) {
+    if (!cdt) {
         printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
-    int max = 0;
 
     /* Recherche de la colonne avec le plus de lignes */
-    for (int i = 0 ; i < cdt->num_columns ; i++) {
-        if (max < cdt->column[i]->T_Logique)
-            max = cdt->column[i]->T_Logique;
+    int max = 0;
+    for (int i = 0 ; i < cdt->mNumColumns ; i++) {
+        if (max < cdt->mColumn[i]->T_Logique)
+            max = cdt->mColumn[i]->T_Logique;
     }
 
     return max;
 }
 
 
-int number_of_cols(CDATAFRAME *cdt) {
+int numberOfCols(CDataFrame *cdt) {
     /* Vérification de la taille du CDataframe */
-    if (cdt == NULL) {
+    if (!cdt) {
         printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
-    return cdt->num_columns;
+    return cdt->mNumColumns;
 }
 
 
-int cell_equal_to(CDATAFRAME *cdt, int x) {
+int cellEqualTo(CDataFrame *cdt, int x) {
     /* Vérification de la taille du CDataframe */
-    if (cdt == NULL) {
+    if (!cdt) {
         printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
-    /* Initialisation du compteur à 0. */
-    int cpt = 0;
-
     /* Parcours des valeurs */
-    for (int i = 0 ; i < cdt->num_columns ; i++) {
-        for (int j = 0 ; j < cdt->column[i]->T_Logique ; j++) {
-            if (cdt->column[i]->data[j] == x)
+    int cpt = 0;
+    for (int i = 0 ; i < cdt->mNumColumns ; i++) {
+        for (int j = 0 ; j < cdt->mColumn[i]->T_Logique ; j++) {
+            if (cdt->mColumn[i]->data[j] == x)
                 cpt++;
         }
     }
@@ -441,20 +431,17 @@ int cell_equal_to(CDATAFRAME *cdt, int x) {
 }
 
 
-int cell_greater_than(CDATAFRAME *cdt, int x) {
-    /* Vérification de la taille du CDataframe */
-    if (cdt == NULL) {
+int cellGreaterThan(CDataFrame *cdt, int x) {
+    if (!cdt) {
         printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
-    /* Initialisation du compteur à 0. */
-    int cpt = 0;
-
     /* Parcours des valeurs */
-    for (int i = 0 ; i < cdt->num_columns ; i++) {
-        for (int j = 0 ; j < cdt->column[i]->T_Logique ; j++) {
-            if (cdt->column[i]->data[j] > x)
+    int cpt = 0;
+    for (int i = 0 ; i < cdt->mNumColumns ; i++) {
+        for (int j = 0 ; j < cdt->mColumn[i]->T_Logique ; j++) {
+            if (cdt->mColumn[i]->data[j] > x)
                 cpt++;
         }
     }
@@ -463,20 +450,17 @@ int cell_greater_than(CDATAFRAME *cdt, int x) {
 }
 
 
-int cell_less_than(CDATAFRAME *cdt, int x) {
-    /* Vérification de la taille du CDataframe */
-    if (cdt == NULL) {
+int cellLessThan(CDataFrame *cdt, int x) {
+    if (!cdt) {
         printf("Le pointeur CDataframe est NULL.\n");
         return 0;
     }
 
-    /* Initialisation du compteur à 0. */
-    int cpt = 0;
-
     /* Parcours des valeurs */
-    for (int i = 0 ; i < cdt->num_columns ; i++) {
-        for (int j = 0 ; j < cdt->column[i]->T_Logique ; j++) {
-            if (cdt->column[i]->data[j] < x)
+    int cpt = 0;
+    for (int i = 0 ; i < cdt->mNumColumns ; i++) {
+        for (int j = 0 ; j < cdt->mColumn[i]->T_Logique ; j++) {
+            if (cdt->mColumn[i]->data[j] < x)
                 cpt++;
         }
     }

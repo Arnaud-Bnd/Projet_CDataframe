@@ -6,37 +6,36 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-COLUMN *create_column(char* title) {
-    COLUMN* column = (COLUMN *) malloc(sizeof (COLUMN));
+/////////////////////////////////////////////////////////////////////////////////:
+Column *createColumn(char* title) {
+    Column* column = (Column *) malloc(sizeof (Column));
     column->title = title;
     column->T_Logique = 0;
     column->T_Physique = 0;
     column->data = NULL;
     column->index = NULL;
-    column->valid_index = 0;
-    column->sort_dir = 0;
+    column->mValidIndex = 0;
+    column->mSortDir = 0;
     return column;
 }
 
-
-int insert_value(COLUMN* col, int value) {
+int insertValue(Column* col, int value) {
     /* Vérification du pointeur colonne */
-    if (col == NULL) {
+    if (!col) {
         printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
     /* Si la colonne n'a pas encore été utilisé, faire une allocation */
-    if (col->data == NULL) {
+    if (!col->data) {
         col->T_Physique += REALLOC_SIZE * sizeof (int);
         col->data = (int*) malloc(col->T_Physique);
 
         /* Allouer la place nécessaire à l'index */
-        col->index = (unsigned long long *) malloc(0 * sizeof (unsigned long long));
+        col->index = (uint64_t *) malloc(0 * sizeof (uint64_t)); // ??? malloc 0 ???
 
         /* Vérification de la bonne allocation */
-        if (col->data == NULL) {
+        if (!col->data) {
             printf("Échec de la réallocation de la mémoire.\n");
             return 0;
         }
@@ -45,7 +44,7 @@ int insert_value(COLUMN* col, int value) {
     /* S'il n'y a plus de place, faire une réallocation */
     else if (col->T_Physique == col->T_Logique) {
         col->T_Physique += REALLOC_SIZE * sizeof (int);
-        col->data = realloc(col->data, col->T_Physique);
+        col->data = realloc(col->data, col->T_Physique); /// ???? pas de contrôle d'erreur d'allocation !!!!
 
         /* Vérification de la bonne réallocation */
         if (col->T_Physique == col->T_Logique) {
@@ -58,7 +57,7 @@ int insert_value(COLUMN* col, int value) {
     col->data[(col->T_Logique)++] = value;
 
     /* Indiquer que la colonne n'est plus triée */
-    col->valid_index = -1;
+    col->mValidIndex = -1;
 
     /* Indiquer l'index associé à la valeur */
     col->index = realloc(col->index, sizeof (unsigned long long) * col->T_Logique);
@@ -67,10 +66,9 @@ int insert_value(COLUMN* col, int value) {
     return 1;
 }
 
-
-void delete_column(COLUMN *col) {
+void deleteColumn(Column *col) {
     /* Vérification du pointeur colonne */
-    if (col == NULL) {
+    if (!col) {
         printf("Le pointeur colonne est déjà NULL.\n");
         return;
     }
@@ -90,10 +88,9 @@ void delete_column(COLUMN *col) {
     //col = NULL;
 }
 
-
-void print_col(COLUMN* col) {
+void printColumn(Column* col) {
     /* Vérification du pointeur colonne */
-    if (col == NULL) {
+    if (!col) {
         printf("Le pointeur colonne est NULL.\n");
         return;
     }
@@ -108,18 +105,15 @@ void print_col(COLUMN* col) {
     printf("\n");
 }
 
-
-int number_occ(COLUMN* col, int value) {
+int numberOcc(Column* col, int value) {
     /* Vérification du pointeur colonne */
-    if (col == NULL) {
+    if (!col) {
         printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
-    /* Initialisation du compteur */
-    int cpt = 0;
-
     /* Parcours de toutes les données */
+    int cpt = 0;
     for (int i = 0 ; i < col->T_Logique ; i++) {
         if (col->data[i] == value)
             cpt++;
@@ -128,34 +122,28 @@ int number_occ(COLUMN* col, int value) {
     return  cpt;
 }
 
-
-int val_at_pos(COLUMN* col, int pos) {
-    /* Vérification du pointeur colonne */
-    if (col == NULL) {
+int valAtPos(Column* col, int pos) {
+    if (!col) {
         printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
     /* Vérifie que la position fait partie du tableau */
-    if (pos <= col->T_Logique)
-        return col->data[pos];
+    if (pos <= col->T_Logique) return col->data[pos];
 
     /* Sinon retourner 0 */
     return 0;
 }
 
 
-int greater_than(COLUMN* col, int x) {
-    /* Vérification du pointeur colonne */
-    if (col == NULL) {
+int greater_than(Column* col, int x) {
+    if (!col) {
         printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
-    /* Initialisation du compteur */
-    int cpt = 0;
-
     /* Parcours de toutes les données */
+    int cpt = 0;
     for (int i = 0 ; i < col->T_Logique ; i++) {
         if (col->data[i] > x)
             cpt++;
@@ -164,18 +152,14 @@ int greater_than(COLUMN* col, int x) {
     return  cpt;
 }
 
-
-int less_than(COLUMN* col, int x) {
-    /* Vérification du pointeur colonne */
-    if (col == NULL) {
+int lessThan(Column* col, int x) {
+    if (!col) {
         printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
-    /* Initialisation du compteur */
+    /* compte les valeurs inferieur à x dans la colonne courante */
     int cpt = 0;
-
-    /* Parcours de toutes les données */
     for (int i = 0 ; i < col->T_Logique ; i++) {
         if (col->data[i] < x)
             cpt++;
@@ -184,18 +168,14 @@ int less_than(COLUMN* col, int x) {
     return  cpt;
 }
 
-
-int equal_to(COLUMN* col, int x) {
-    /* Vérification du pointeur colonne */
-    if (col == NULL) {
+int equalTo(Column* col, int x) {
+    if (!col) {
         printf("Le pointeur colonne est NULL.\n");
         return 0;
     }
 
-    /* Initialisation du compteur */
+    /* compte les valeurs égales à x dans la colonne courante */
     int cpt = 0;
-
-    /* Parcours de toutes les données */
     for (int i = 0 ; i < col->T_Logique ; i++) {
         if (col->data[i] == x)
             cpt++;

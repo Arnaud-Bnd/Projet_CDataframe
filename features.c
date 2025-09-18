@@ -13,6 +13,31 @@ void swap(int *a, int *b) {
     *b = temp;
 }
 
+int partition(int *tab, int left, int right) {
+    int pivot = tab[right];
+    int i = left - 1;
+    for (int j = left ; i <= right ; j++) {
+        if (tab[j] < pivot) {
+            i++;
+            int temp = tab[i];
+            tab[i] = tab[j];
+            tab[j] = temp;
+        }
+    }
+    int temp = tab[i + 1];
+    tab[i + 1] = tab[right];
+    tab[right] = temp;
+
+    return i + 1;
+}
+void quicksort(int *tab, int left, int right) {
+    if (left < right) {
+        int pi = partition(tab, left, right);
+        quicksort(tab, left, pi - 1);
+        quicksort(tab, pi + 1, right);
+    }
+}
+
 
 void sort(Column *col, SortType sort_dir) {
     /* Vérification de la taille de la colonne */
@@ -92,32 +117,6 @@ void sort(Column *col, SortType sort_dir) {
 }
 
 
-void quicksort(int *tab, int left, int right) {
-    if (left < right) {
-        int pi = partition(tab, left, right);
-        quicksort(tab, left, pi - 1);
-        quicksort(tab, pi + 1, right);
-    }
-}
-
-
-int partition(int *tab, int left, int right) {
-    int pivot = tab[right];
-    int i = left - 1;
-    for (int j = left ; i <= right ; j++) {
-        if (tab[j] < pivot) {
-            i++;
-            int temp = tab[i];
-            tab[i] = tab[j];
-            tab[j] = temp;
-        }
-    }
-    int temp = tab[i + 1];
-    tab[i + 1] = tab[right];
-    tab[right] = temp;
-
-    return i + 1;
-}
 
 
 void printSortCdt(CDataFrame *cdt, int index){

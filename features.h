@@ -33,21 +33,6 @@ typedef struct {
 void sort(Column *col, SortType sort_dir);
 
 
-/* Quicksort
- * @param1 : Pointer to the column to sort
- * @param2 : Left terminal
- * @param3 : Right terminal
- */
-void quicksort(int *tab, int left, int right);
-
-/* Partition
- * @param1 : Pointer to the column to sort
- * @param2 : Left terminal
- * @param3 : Right terminal
- */
-int partition(int *tab, int left, int right);
-
-
 /* Print a CDataframe content
  * @param1 : Pointer to a CDataframe
  */
@@ -102,14 +87,12 @@ int displayMenu1();
  */
 int displayMenu2();
 
-
 /* Create a CDataframe from csv file
  * @param1: CSV filename
  * @param2: Array of types
  * @param3: Size of array in param2
  */
 CDataFrame* loadFromCsv(char *file_name, int size);
-
 
 /* Export into a csv file
  * @param1: Pointer to the CDataframe

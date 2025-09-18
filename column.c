@@ -2,13 +2,15 @@
 // Created by Arnaud Bernard on 28/03/2024.
 //
 #include "column.h"
+#include "Errors.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 /////////////////////////////////////////////////////////////////////////////////:
 Column *createColumn(char* title) {
-    Column* column = (Column *) malloc(sizeof (Column));
+    Column* column = (Column *) malloc(sizeof (Column)); // ???? il y a un probleme dans cette fonction ????
     column->title = title;
     column->T_Logique = 0;
     column->T_Physique = 0;
@@ -20,11 +22,11 @@ Column *createColumn(char* title) {
 }
 
 int insertValue(Column* col, int value) {
-    /* Vérification du pointeur colonne */
-    if (!col) {
-        printf("Le pointeur colonne est NULL.\n");
-        return 0;
-    }
+//    if (!col) {
+//        printf("Le pointeur colonne est NULL.\n");
+//        return 0;
+//    }
+    POINTER_CHECK_AND_RETURN_VALUE(col, "Le pointeur colon ", 0);
 
     /* Si la colonne n'a pas encore été utilisé, faire une allocation */
     if (!col->data) {
@@ -32,13 +34,14 @@ int insertValue(Column* col, int value) {
         col->data = (int*) malloc(col->T_Physique);
 
         /* Allouer la place nécessaire à l'index */
-        col->index = (uint64_t *) malloc(0 * sizeof (uint64_t)); // ??? malloc 0 ???
+        col->index = (uint64_t *) malloc(0 * sizeof (uint64_t)); // ??? malloc 0,pourquoi ???
 
-        /* Vérification de la bonne allocation */
-        if (!col->data) {
-            printf("Échec de la réallocation de la mémoire.\n");
-            return 0;
-        }
+//        /* Vérification de la bonne allocation */
+//        if (!col->data) {
+//            printf("Échec de la réallocation de la mémoire.\n");
+//            return 0;
+//        }
+        POINTER_CHECK_AND_RETURN_VALUE(col, "Échec de la réallocation de la mémoire col->index ", 0);
     }
 
     /* S'il n'y a plus de place, faire une réallocation */
@@ -60,18 +63,18 @@ int insertValue(Column* col, int value) {
     col->mValidIndex = -1;
 
     /* Indiquer l'index associé à la valeur */
-    col->index = realloc(col->index, sizeof (unsigned long long) * col->T_Logique);
+    col->index = (uint64_t *)realloc(col->index, sizeof (uint64_t) * col->T_Logique);
     col->index[col->T_Logique - 1] = col->T_Logique - 1;
 
     return 1;
 }
 
 void deleteColumn(Column *col) {
-    /* Vérification du pointeur colonne */
-    if (!col) {
-        printf("Le pointeur colonne est déjà NULL.\n");
-        return;
-    }
+//    if (!col) {
+//        printf("Le pointeur colonne est déjà NULL.\n");
+//        return;
+//    }
+    POINTER_CHECK_AND_RETURN(col, "Le pointeur col ");
 
     /* Libère la mémoire allouée au tableau de donnée */
     col->T_Physique = 0;
@@ -89,11 +92,11 @@ void deleteColumn(Column *col) {
 }
 
 void printColumn(Column* col) {
-    /* Vérification du pointeur colonne */
-    if (!col) {
-        printf("Le pointeur colonne est NULL.\n");
-        return;
-    }
+//    if (!col) {
+//        printf("Le pointeur colonne est NULL.\n");
+//        return;
+//    }
+    POINTER_CHECK_AND_RETURN(col, "Le pointeur col ");
 
     /* Afficher le titre de la colonne */
     printf("\n%s \n", col->title);
@@ -106,11 +109,11 @@ void printColumn(Column* col) {
 }
 
 int numberOcc(Column* col, int value) {
-    /* Vérification du pointeur colonne */
-    if (!col) {
-        printf("Le pointeur colonne est NULL.\n");
-        return 0;
-    }
+    //    if (!col) {
+    //        printf("Le pointeur colonne est NULL.\n");
+    //        return;
+    //    }
+    POINTER_CHECK_AND_RETURN_VALUE(col, "Le pointeur col ", 0);
 
     /* Parcours de toutes les données */
     int cpt = 0;
@@ -123,10 +126,11 @@ int numberOcc(Column* col, int value) {
 }
 
 int valAtPos(Column* col, int pos) {
-    if (!col) {
-        printf("Le pointeur colonne est NULL.\n");
-        return 0;
-    }
+    //    if (!col) {
+    //        printf("Le pointeur colonne est NULL.\n");
+    //        return;
+    //    }
+    POINTER_CHECK_AND_RETURN_VALUE(col, "Le pointeur col ", 0);
 
     /* Vérifie que la position fait partie du tableau */
     if (pos <= col->T_Logique) return col->data[pos];
@@ -137,10 +141,11 @@ int valAtPos(Column* col, int pos) {
 
 
 int greater_than(Column* col, int x) {
-    if (!col) {
-        printf("Le pointeur colonne est NULL.\n");
-        return 0;
-    }
+    //    if (!col) {
+    //        printf("Le pointeur colonne est NULL.\n");
+    //        return; // On ne voit pas return la sortie de la function en int et pas void ????
+    //    }
+    POINTER_CHECK_AND_RETURN_VALUE(col, "Le pointeur col ", -1);
 
     /* Parcours de toutes les données */
     int cpt = 0;
@@ -153,10 +158,11 @@ int greater_than(Column* col, int x) {
 }
 
 int lessThan(Column* col, int x) {
-    if (!col) {
-        printf("Le pointeur colonne est NULL.\n");
-        return 0;
-    }
+    //    if (!col) {
+    //        printf("Le pointeur colonne est NULL.\n");
+    //        return;
+    //    }
+    POINTER_CHECK_AND_RETURN_VALUE(col, "Le pointeur col ", -1);
 
     /* compte les valeurs inferieur à x dans la colonne courante */
     int cpt = 0;
@@ -169,10 +175,11 @@ int lessThan(Column* col, int x) {
 }
 
 int equalTo(Column* col, int x) {
-    if (!col) {
-        printf("Le pointeur colonne est NULL.\n");
-        return 0;
-    }
+    //    if (!col) {
+    //        printf("Le pointeur colonne est NULL.\n");
+    //        return;
+    //    }
+    POINTER_CHECK_AND_RETURN_VALUE(col, "Le pointeur col ", -1);
 
     /* compte les valeurs égales à x dans la colonne courante */
     int cpt = 0;

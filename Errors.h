@@ -16,7 +16,7 @@ void PrintErrorMessage(const char *s_message,
 
 #define POINTER_CHECK_AND_RETURN_VALUE(pt, message, retVal)                                                          \
     {                                                                                                        \
-        if (!pt)) {                                                                                         \
+        if (!pt) {                                                                                         \
             PrintErrorMessage(                                                                               \
                 "Can not allocate ", message, #pt, __FILE__, __FUNCTION__, __LINE__);                                \
         }                                                                                                    \

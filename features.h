@@ -10,14 +10,6 @@
 
 #include "cdataframe.h"
 
-//#define ASC 0
-//#define DESC 1
-
-//typedef enum SortType {
-//    asc = 0,
-//    desc = 1
-//} SortType;
-
 /*
 typedef struct {
     char *ligne;
